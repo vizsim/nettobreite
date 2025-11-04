@@ -6,45 +6,91 @@ const WIDTH_RANGE_FILTERS = {
   "not-plausible": ["all",
     ["has", "width_effective"],
     [">=", ["get", "width_effective"], 0],
-    ["<", ["get", "width_effective"], 1]
+    ["<", ["get", "width_effective"], 2]
   ],
   "very-narrow": ["all",
     ["has", "width_effective"],
-    [">=", ["get", "width_effective"], 1],
+    [">=", ["get", "width_effective"], 2],
     ["<", ["get", "width_effective"], 3]
   ],
-  "narrow-3-4": ["all", 
+  "narrow-3-4": ["all",
+    ["has", "width_effective"],
     [">=", ["get", "width_effective"], 3],
     ["<", ["get", "width_effective"], 4]
   ],
   "narrow-4-45": ["all",
+    ["has", "width_effective"],
     [">=", ["get", "width_effective"], 4],
     ["<", ["get", "width_effective"], 4.5]
   ],
   "narrow-45-5": ["all",
+    ["has", "width_effective"],
     [">=", ["get", "width_effective"], 4.5],
     ["<", ["get", "width_effective"], 5]
   ],
   "restricted-5-55": ["all",
+    ["has", "width_effective"],
     [">=", ["get", "width_effective"], 5],
     ["<", ["get", "width_effective"], 5.5]
   ],
   "sufficient-55-6": ["all",
+    ["has", "width_effective"],
     [">=", ["get", "width_effective"], 5.5],
     ["<", ["get", "width_effective"], 6]
   ],
   "wide-6-7": ["all",
+    ["has", "width_effective"],
     [">=", ["get", "width_effective"], 6],
     ["<", ["get", "width_effective"], 7]
   ],
   "very-wide-7-8": ["all",
+    ["has", "width_effective"],
     [">=", ["get", "width_effective"], 7],
     ["<", ["get", "width_effective"], 8]
   ],
-  "very-wide-8plus": [">=", ["get", "width_effective"], 8],
+  "very-wide-8plus": ["all",
+    ["has", "width_effective"],
+    [">=", ["get", "width_effective"], 8]
+  ],
   "no-width": ["any",
+    // Fehlende width_effective
+    ["==", ["get", "width_effective"], null],
+    ["!", ["has", "width_effective"]],
+    // Missing flags (werden als schwarz dargestellt) - unterstützt verschiedene Datentypen
+    ["any",
+      ["==", ["get", "cycleway_missing"], true],
+      ["==", ["get", "cycleway_missing"], "true"],
+      ["==", ["get", "cycleway_missing"], 1]
+    ],
+    ["any",
+      ["==", ["get", "parking_missing"], true],
+      ["==", ["get", "parking_missing"], "true"],
+      ["==", ["get", "parking_missing"], 1]
+    ],
+    ["any",
+      ["==", ["get", "widths_missing"], true],
+      ["==", ["get", "widths_missing"], "true"],
+      ["==", ["get", "widths_missing"], 1]
+    ]
+  ],
+  "no-width-effective": ["any",
     ["==", ["get", "width_effective"], null],
     ["!", ["has", "width_effective"]]
+  ],
+  "cycleway-missing": ["any",
+    ["==", ["get", "cycleway_missing"], true],
+    ["==", ["get", "cycleway_missing"], "true"],
+    ["==", ["get", "cycleway_missing"], 1]
+  ],
+  "parking-missing": ["any",
+    ["==", ["get", "parking_missing"], true],
+    ["==", ["get", "parking_missing"], "true"],
+    ["==", ["get", "parking_missing"], 1]
+  ],
+  "widths-missing": ["any",
+    ["==", ["get", "widths_missing"], true],
+    ["==", ["get", "widths_missing"], "true"],
+    ["==", ["get", "widths_missing"], 1]
   ]
 };
 
@@ -81,46 +127,96 @@ function updateMapFilter(map, forceVisibility = false) {
     map.setLayoutProperty("nettobreite", "visibility", "visible");
   }
 
-  // Build filter: show all features EXCEPT those in disabled ranges
-  // Special handling: "no-width" (schwarz) always stays visible unless explicitly disabled
-  const isNoWidthDisabled = disabledRanges.has("no-width");
+  // Build filter: show only enabled categories (inclusion strategy)
+  // This allows filtering to show only specific categories
+  const allRanges = Object.keys(WIDTH_RANGE_FILTERS);
+  const enabledRanges = allRanges.filter(range => !disabledRanges.has(range));
   
-  if (disabledRanges.size === 0) {
-    // No filter needed - show everything
+  // Check which specific missing categories are disabled
+  // If "no-width" is disabled, also treat all missing subcategories as disabled
+  const isNoWidthDisabled = disabledRanges.has("no-width");
+  const disabledMissingCategories = ["cycleway-missing", "parking-missing", "widths-missing"].filter(
+    cat => disabledRanges.has(cat) || isNoWidthDisabled
+  );
+  
+  if (enabledRanges.length === 0) {
+    // All categories disabled - hide layer
+    map.setLayoutProperty("nettobreite", "visibility", "none");
+    return;
+  }
+  
+  if (enabledRanges.length === allRanges.length) {
+    // All categories enabled - no filter needed
     map.setFilter("nettobreite", null);
   } else {
-    // Separate "no-width" from other disabled ranges
-    const disabledRangesWithoutNoWidth = Array.from(disabledRanges).filter(range => range !== "no-width");
+    // Build inclusion filters for enabled ranges
+    let inclusionFilters = enabledRanges.map(range => {
+      const filter = WIDTH_RANGE_FILTERS[range];
+      // Ensure filter is properly wrapped if it's not already an array
+      return Array.isArray(filter) ? filter : filter;
+    });
     
-    if (disabledRangesWithoutNoWidth.length === 0) {
-      // Only "no-width" is disabled, show everything else
-      const noWidthFilter = WIDTH_RANGE_FILTERS["no-width"];
-      map.setFilter("nettobreite", ["!", noWidthFilter]);
-    } else {
-      // Build exclusion filters for non-no-width ranges
-      const exclusionFilters = disabledRangesWithoutNoWidth.map(range => {
-        const filter = WIDTH_RANGE_FILTERS[range];
-        return ["!", filter];
-      });
-
-      // If "no-width" is not disabled, always include it (show no-width OR show filtered ranges)
-      if (!isNoWidthDisabled) {
-        const noWidthFilter = WIDTH_RANGE_FILTERS["no-width"];
-        // Show: no-width OR (not disabled ranges)
-        const showEnabledRanges = exclusionFilters.length === 1 
-          ? exclusionFilters[0]
-          : ["all", ...exclusionFilters];
-        
-        map.setFilter("nettobreite", ["any", noWidthFilter, showEnabledRanges]);
-      } else {
-        // "no-width" is also disabled, just exclude all disabled ranges
-        if (exclusionFilters.length === 1) {
-          map.setFilter("nettobreite", exclusionFilters[0]);
-        } else {
-          map.setFilter("nettobreite", ["all", ...exclusionFilters]);
-        }
+    // Build exclusion filters for disabled missing categories
+    // These must always be excluded, even if "no-width" is enabled
+    // We need to exclude ALL features that have these flags set, regardless of other conditions
+    const exclusionFilters = [];
+    
+    // If "no-width" is disabled, also exclude features without width_effective
+    if (isNoWidthDisabled) {
+      // Exclude features without width_effective
+      exclusionFilters.push(["!", ["any",
+        ["==", ["get", "width_effective"], null],
+        ["!", ["has", "width_effective"]]
+      ]]);
+    }
+    
+    for (const cat of disabledMissingCategories) {
+      // Create a direct exclusion filter for each missing flag
+      // This ensures ALL features with this flag are excluded, regardless of other properties
+      if (cat === "cycleway-missing") {
+        // Exclude features where cycleway_missing is true (any format: true, "true", or 1)
+        exclusionFilters.push(["!", ["any",
+          ["==", ["get", "cycleway_missing"], true],
+          ["==", ["get", "cycleway_missing"], "true"],
+          ["==", ["get", "cycleway_missing"], 1]
+        ]]);
+      } else if (cat === "parking-missing") {
+        // Exclude features where parking_missing is true (any format: true, "true", or 1)
+        exclusionFilters.push(["!", ["any",
+          ["==", ["get", "parking_missing"], true],
+          ["==", ["get", "parking_missing"], "true"],
+          ["==", ["get", "parking_missing"], 1]
+        ]]);
+      } else if (cat === "widths-missing") {
+        // Exclude features where widths_missing is true (any format: true, "true", or 1)
+        exclusionFilters.push(["!", ["any",
+          ["==", ["get", "widths_missing"], true],
+          ["==", ["get", "widths_missing"], "true"],
+          ["==", ["get", "widths_missing"], 1]
+        ]]);
       }
     }
+    
+    // Show features that match any of the enabled ranges, but exclude disabled missing categories
+    let finalFilter;
+    
+    if (inclusionFilters.length === 1) {
+      finalFilter = inclusionFilters[0];
+    } else {
+      // Combine all enabled filters with "any" to show features matching any enabled category
+      finalFilter = ["any", ...inclusionFilters];
+    }
+    
+    // Always exclude disabled missing categories
+    if (exclusionFilters.length > 0) {
+      if (exclusionFilters.length === 1) {
+        finalFilter = ["all", finalFilter, exclusionFilters[0]];
+      } else {
+        finalFilter = ["all", finalFilter, ...exclusionFilters];
+      }
+    }
+    
+    map.setFilter("nettobreite", finalFilter);
   }
 }
 
@@ -139,6 +235,29 @@ function toggleWidthRange(map, rangeKey) {
     disabledRanges.delete(rangeKey);
   } else {
     disabledRanges.add(rangeKey);
+  }
+
+  // If "no-width" is toggled, also toggle subcategories
+  const subcategories = ["cycleway-missing", "parking-missing", "widths-missing"];
+  
+  if (rangeKey === "no-width") {
+    // When "no-width" is disabled, also disable subcategories
+    // When "no-width" is enabled, also enable subcategories
+    const isNoWidthDisabled = disabledRanges.has("no-width");
+    
+    subcategories.forEach(subCat => {
+      if (isNoWidthDisabled) {
+        disabledRanges.add(subCat);
+      } else {
+        disabledRanges.delete(subCat);
+      }
+      
+      // Update UI for subcategory
+      const subCategoryElement = document.querySelector(`[data-width-range="${subCat}"]`);
+      if (subCategoryElement) {
+        subCategoryElement.classList.toggle("disabled", isNoWidthDisabled);
+      }
+    });
   }
 
   // Update UI

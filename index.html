@@ -58,26 +58,26 @@ MAIN HEADER
           <div style="margin-top: 8px;">
             <div class="legend-category" data-width-range="not-plausible" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
               <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#808080;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
-              <span class="legend-text">&lt; 1 m – Wert nicht plausibel</span>
+              <span class="legend-text">&lt; 2 m – Wert nicht plausibel</span>
             </div>
             <div class="legend-category" data-width-range="very-narrow" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
-              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#cc0000;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
-              <span class="legend-text">1 – 3 m – Sehr schmal</span>
+              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#e51900;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+              <span class="legend-text">2 – 3 m – Sehr schmal</span>
             </div>
             <div class="legend-category" data-width-range="narrow-3-4" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
-              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#ff6600;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#ff5500;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
               <span class="legend-text">3 – 4 m – Eng</span>
             </div>
             <div class="legend-category" data-width-range="narrow-4-45" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
-              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#ff9900;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#ff8800;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
               <span class="legend-text">4 – 4.5 m – Eng</span>
             </div>
             <div class="legend-category" data-width-range="narrow-45-5" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
-              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#ffcc00;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#ffaa00;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
               <span class="legend-text">4.5 – 5 m – Eng</span>
             </div>
             <div class="legend-category" data-width-range="restricted-5-55" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
-              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#ffdd00;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#e5dd00;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
               <span class="legend-text">5 – 5.5 m – Eingeschränkt</span>
             </div>
             <div class="legend-category" data-width-range="sufficient-55-6" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
@@ -98,7 +98,19 @@ MAIN HEADER
             </div>
             <div class="legend-category" data-width-range="no-width" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
               <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#000000;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
-              <span class="legend-text">keine Breite angegeben</span>
+              <span class="legend-text">Fehlende Angaben</span>
+            </div>
+            <div class="legend-category legend-subcategory" data-width-range="cycleway-missing" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
+              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#000000;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+              <span class="legend-text"><code>cycleway</code> nicht angegeben</span>
+            </div>
+            <div class="legend-category legend-subcategory" data-width-range="parking-missing" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
+              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#000000;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+              <span class="legend-text"><code>parking</code> nicht angegeben</span>
+            </div>
+            <div class="legend-category legend-subcategory" data-width-range="widths-missing" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
+              <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#000000;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+              <span class="legend-text"><code>width</code> nicht angegeben</span>
             </div>
           </div>
         </div>

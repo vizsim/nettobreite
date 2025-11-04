@@ -13,6 +13,11 @@ export function setupNettobreitePopups(map) {
         const highway = props.highway || 'N/A';
         const oneway = props.oneway || 'no';
         
+        // Missing flags
+        const cyclewayMissing = props.cycleway_missing === true || props.cycleway_missing === 'true' || props.cycleway_missing === 1 ? 'Ja' : 'Nein';
+        const parkingMissing = props.parking_missing === true || props.parking_missing === 'true' || props.parking_missing === 1 ? 'Ja' : 'Nein';
+        const widthsMissing = props.widths_missing === true || props.widths_missing === 'true' || props.widths_missing === 1 ? 'Ja' : 'Nein';
+        
         // Handle cycleway - use cycleway:both as fallback for left/right
         const cyclewayBoth = props['cycleway:both'];
         const cyclewayLeft = props['cycleway:left'] || cyclewayBoth || 'N/A';
@@ -48,8 +53,6 @@ export function setupNettobreitePopups(map) {
                 <tr><td style="padding: 2px 0;"><strong>Breite (effektiv)</strong></td><td style="padding: 2px 0; text-align: right;">${widthEffective}</td></tr>
             </table>
         </div>
-
-
 
         <!-- Parkplatzinformationen -->
         <div style="margin-bottom: 12px;">
@@ -88,6 +91,9 @@ export function setupNettobreitePopups(map) {
                 <tr><td style="padding: 2px 0;"><strong>Highway</strong></td><td style="padding: 2px 0; text-align: right;">${highway}</td></tr>
                 <tr><td style="padding: 2px 0;"><strong>Einbahnstraße</strong></td><td style="padding: 2px 0; text-align: right;">${oneway}</td></tr>
                 <tr><td style="padding: 2px 0;"><strong>OSM ID</strong></td><td style="padding: 2px 0; text-align: right;">${id !== 'N/A' ? `<a href="https://www.openstreetmap.org/way/${id}" target="_blank" style="color: #0066cc; text-decoration: none;">${id}</a>` : id}</td></tr>
+                <tr><td style="padding: 2px 0;"><strong>Cycleway fehlt</strong></td><td style="padding: 2px 0; text-align: right;">${cyclewayMissing}</td></tr>
+                <tr><td style="padding: 2px 0;"><strong>Parking fehlt</strong></td><td style="padding: 2px 0; text-align: right;">${parkingMissing}</td></tr>
+                <tr><td style="padding: 2px 0;"><strong>Widths fehlt</strong></td><td style="padding: 2px 0; text-align: right;">${widthsMissing}</td></tr>
             </table>
         </div>
     </div>

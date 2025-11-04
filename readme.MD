@@ -8,7 +8,7 @@ Visualisierung der Straßennettobreite auf Basis von OpenStreetMap-Daten und der
 
 Dieses Projekt visualisiert die effektive Straßennettobreite. Die Breitenwerte werden aus OpenStreetMap-Daten berechnet und mit der Methodik des Cycling Quality Index (CQI) ermittelt.
 
-Die Darstellung zeigt verschiedene Breitenkategorien farbcodiert auf einer interaktiven Karte, um die Qualität der Radinfrastruktur zu visualisieren.
+Die Darstellung zeigt verschiedene Breitenkategorien farbcodiert auf einer interaktiven Karte.
 
 **Inspiration**: [OSM Diary Entry von Pieter Vander Vennet](https://www.openstreetmap.org/user/Pieter%20Vander%20Vennet/diary/407661)
 
@@ -44,6 +44,5 @@ Die Darstellung zeigt verschiedene Breitenkategorien farbcodiert auf einer inter
 
 - **Framework**: MapLibre GL JS
 - **Datenformat**: PMTiles
-- **Kartenbasis**: MapTiler (konfigurierbar)
 
 ---

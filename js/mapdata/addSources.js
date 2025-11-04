@@ -3,10 +3,10 @@ export function addSources(map, { MAPTILER_API_KEY, MAPILLARY_TOKEN }) {
 
  // const pmtilesBaseURL = "https://f003.backblazeb2.com/file/nettobreite/";
 
-   // g
-  const pmtilesBaseURL = "https://raw.githubusercontent.com/vizsim/nettobreite/main/data/";
+   // github
+  //const pmtilesBaseURL = "https://raw.githubusercontent.com/vizsim/nettobreite/main/data/";
   // local
-  //const pmtilesBaseURL = "./data/";
+  const pmtilesBaseURL = "./data/";
 
   const addPMTilesSource = (id, filename) => {
     if (!map.getSource(id)) {

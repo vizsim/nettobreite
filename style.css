@@ -7,6 +7,16 @@ body {
   font-family: sans-serif;
 }
 
+/* ───── Code Formatting ───── */
+code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.95em;
+  background-color: #f5f5f5;
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: #333;
+}
+
 /* ───── Interactive Legend Styles ───── */
 .legend-category {
   transition: all 0.2s ease;
@@ -33,6 +43,11 @@ body {
 .legend-category.disabled .legend-text {
   text-decoration: line-through;
   color: #999;
+}
+
+.legend-subcategory {
+  margin-left: 20px;
+  font-size: 11px;
 }
 
 /* ───── Tab Styles ───── */

@@ -15,23 +15,31 @@ export function addLayers(map) {
     paint: {
       "line-color": [
         "case",
+        // Wenn eines der missing-Flags True ist: schwarz
+        ["any",
+          ["==", ["get", "cycleway_missing"], true],
+          ["==", ["get", "parking_missing"], true],
+          ["==", ["get", "widths_missing"], true]
+        ],
+        "#000000",  // Schwarz für missing data
         // Wenn width_effective nicht vorhanden: schwarz (keine Breite angegeben)
         ["!", ["has", "width_effective"]],
         "#000000",  // Schwarz für keine Breite angegeben
-        // Wenn width_effective < 1: grau (nicht plausibel)
-        ["<", ["get", "width_effective"], 1],
+        // Wenn width_effective < 2: grau (nicht plausibel)
+        ["<", ["get", "width_effective"], 2],
         "#808080",  // Grau für nicht plausibel
         // Sonst: normale Interpolation
         [
           "interpolate",
           ["linear"],
           ["get", "width_effective"],
-          1, "#cc0000",    // Rot für sehr schmal (ab 1m)
-          2, "#ff3300",    // Rot-Orange
-          3, "#ff6600",    // Orange
-          4, "#ff9900",    // Orange-Gelb
-          4.5, "#ffcc00",  // Gelb-Orange
-          5, "#ffdd00",    // Gelb
+          2, "#cc0000",    // Rot für sehr schmal (ab 2m)
+          2.5, "#dd0000",  // Dunkelrot
+          3, "#ff3300",    // Rot-Orange
+          3.5, "#ff5500",  // Rot-Orange
+          4, "#ff7700",    // Orange
+          4.5, "#ff9900",  // Orange-Gelb
+          5, "#ffbb00",    // Gelb-Orange (noch etwas röter)
           5.5, "#ccff00",  // Gelb-Grün
           6, "#99ff00",    // Grün-Gelb
           7, "#66ff00",    // Grün
@@ -43,10 +51,10 @@ export function addLayers(map) {
         "interpolate",
         ["linear"],
         ["zoom"],
-        9, 1,
-        12, 3,
-        15, 4,
-        18, 6
+        9, 0.4,
+        12, 1.6,
+        15, 5,
+        18, 8
       ],
       "line-opacity": 0.8
     }
