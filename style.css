@@ -1,0 +1,588 @@
+/* ───── General Layout ───── */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: sans-serif;
+}
+
+/* ───── Interactive Legend Styles ───── */
+.legend-category {
+  transition: all 0.2s ease;
+  user-select: none;
+  padding: 2px 4px;
+  margin: 2px -4px;
+  border-radius: 3px;
+}
+
+.legend-category:hover {
+  opacity: 0.7;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.legend-category.disabled {
+  opacity: 0.3;
+}
+
+.legend-category.disabled .legend-color {
+  opacity: 0.3;
+  border-color: #999 !important;
+}
+
+.legend-category.disabled .legend-text {
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* ───── Tab Styles ───── */
+.tab-button {
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  background: #e0e0e0 !important;
+}
+
+.tab-button.active {
+  background: #f0f0f0 !important;
+  font-weight: bold;
+}
+
+.tab-content {
+  transition: opacity 0.2s ease;
+}
+
+/* ───── Popup Styles ───── */
+.reachability-popup .maplibregl-popup-content {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #ddd;
+}
+
+.reachability-popup .maplibregl-popup-tip {
+  border-top-color: #fff;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* ────────────── Legend Style ────────────── */
+
+.legend-heading {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.legend-heading img {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.legend-subtext {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.legend-subtext a {
+  color: #0066cc;
+  text-decoration: none;
+  border-bottom: 1px solid #0066cc;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.legend-subtext a:hover {
+  color: #004499;
+  border-bottom-color: #004499;
+}
+
+.info-icon {
+  display: inline-block;
+  font-size: 14px;
+  cursor: help;
+  color: #555;
+  line-height: 1;
+  margin-left: 6px;
+  vertical-align: middle;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.info-icon:hover {
+  opacity: 1;
+}
+
+.legend {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  width: 320px;
+  max-width: 100%;
+  max-height: calc(100dvh - 160px);
+  /* 60 top + 80 bottom */
+  /* background: rgb(254, 253, 255); */
+  background: white;
+  padding: 10px;
+  font-size: 12px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  /* overflow-y: auto; */
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+
+.legend .legend-title .info-icon {
+  font-size: 14px;
+  cursor: help;
+  color: #555;
+}
+
+.legend-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 6px;
+  cursor: pointer;
+  gap: 12px;
+  min-height: 48px;
+}
+
+.legend-header label {
+  font-size: 12px;
+}
+
+
+.legend-section-divider {
+  border-top: 1px solid #ccc;
+  margin: 12px 0 6px;
+}
+
+.legend-subsection-divider {
+  border-top: 1px solid #ddd;
+  margin: 2px 0;
+  margin-left: 16px;
+  /* Einrückung nach rechts */
+  width: calc(100% - 16px);
+  /* Optional: macht's proportional */
+}
+
+/* Items and layout */
+.legend-items {
+  margin-left: 8px;
+}
+
+.legend-items.collapsed {
+  display: none;
+}
+
+
+.legend-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.label-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  /* ← This is the key part */
+  min-width: 0;
+  /* prevents overflow on long labels */
+}
+
+
+/* .legend-section {
+    margin-top: 10px;
+} */
+
+
+
+.legend-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #333;
+  cursor: pointer;
+  gap: 6px;
+}
+
+.legend-section-title label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+
+
+.legend.collapsed>.legend-section,
+.legend.collapsed>.scenario-legend-section,
+.legend.collapsed>.legend-subsection-divider {
+  display: none;
+}
+
+
+/* ─── Cluster Legend Layout ─── */
+
+
+
+.legend-section-allcontent {
+  display: flex;
+  gap: 20px;
+  margin-top: 14px; 
+
+}
+
+
+/* ─── Linke Spalte: Cluster Entries ─── */
+
+.cluster-legend-entry {
+  display: grid;
+  grid-template-columns: 35px 1fr;
+  align-items: center;
+  column-gap: 6px;
+  margin-bottom: 6px;
+  padding-left: 8px;
+}
+
+.cluster-dot {
+  justify-self: center;
+  background-color: #999;
+  border-radius: 50%;
+  border: 0.5px solid #e6e6e6;
+  box-sizing: border-box;
+}
+
+.cluster-label {
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+/* ─── Rechte Spalte: Verletztenanteile ─── */
+
+#cluster-legend-color {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cluster-color-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cluster-color-item svg {
+  width: 30px;
+  height: 30px;
+  display: block;
+  /* wichtig! */
+  min-width: 30px;
+  /* stellt konsistente Breite sicher */
+}
+
+
+
+/* ─────  ───── */
+.color-box {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+
+
+/* ───── Count Badges ───── */
+
+.count-badge {
+  font-size: 10px;
+  padding: 0 4px;
+  background: #eee;
+  border-radius: 10px;
+  min-width: 24px;
+  text-align: center;
+  white-space: nowrap;
+  color: #333;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+/* ───── Toggle Arrows ───── */
+
+/* Basis-Pfeil-Logik */
+.toggle-arrow {
+  display: inline-block;
+  transform: rotate(135deg);
+  transition: transform 0.2s ease;
+}
+
+/* Offener Zustand */
+.toggle-arrow.open {
+  transform: rotate(45deg);
+}
+
+/* Großer Root-Pfeil (nur bei legend-root) */
+[data-arrow="legend-root"] {
+  width: 14px !important;
+  height: 14px !important;
+  border-right: 5px solid #000 !important;
+  border-bottom: 5px solid #000 !important;
+  margin-left: auto;
+  cursor: pointer !important;
+  z-index: 1000 !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+}
+
+/* Mittlere Section-Pfeile */
+.section-arrow {
+  width: 10px;
+  height: 10px;
+  border-right: 4px solid #000;
+  border-bottom: 4px solid #000;
+  margin-left: 8px;
+}
+
+/* Kleine Pfeile bei legend-header */
+.legend-header .toggle-arrow {
+  width: 6px;
+  height: 6px;
+  border-right: 3px solid #000;
+  border-bottom: 3px solid #000;
+  margin-left: 6px;
+}
+
+
+
+/* Einklappbare Sektionen */
+.legend-section.collapsed .legend-section-content {
+  display: none;
+}
+
+.legend-section.collapsed .legend-section-allcontent {
+  display: none;
+}
+
+
+
+
+/* ───── Hidden Section Defaults ───── */
+#mapillary-legend,
+#movebis-legend,
+#hvs-legend,
+#maxspeed-legend,
+#obs-legend,
+#schools-legend {
+  display: none;
+}
+
+
+
+
+/* ────────────── Feature Count ────────────── */
+
+#feature-count {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 1.3;
+}
+
+#feature-count-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+
+/* ────────────── zoomlock ────────────── */
+.zoom-lock {
+  font-size: 0.8em;
+  vertical-align: middle;
+  opacity: 0.8;
+}
+
+/* ────────────── Photon Geocoder ────────────── */
+.geocoder {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  background: white;
+  padding: 6px;
+  border-radius: 4px;
+  width: 300px;
+}
+
+#search {
+  width: 100%;
+  padding: 6px;
+  font-size: 14px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#results {
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: none;
+}
+
+.result-item {
+  padding: 6px;
+  cursor: pointer;
+}
+
+.result-item:hover {
+  background: #f0f0f0;
+}
+
+/* ───── Container Bottom Left ───── */
+#bottom-left-ui-container {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  display: flex;
+  gap: 12px;
+  z-index: 2;
+  font-family: sans-serif;
+  align-items: flex-end;
+  /* 👈 keeps thumbs and box aligned at bottom */
+}
+
+/* ───── Basemap Thumbnails ───── */
+
+#basemap-thumbnails {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.basemap-thumb {
+  width: 60px;
+  height: 60px;
+  background-size: cover;
+  background-position: center;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  transition: border 0.2s;
+  margin-bottom: -2px;
+}
+
+.basemap-thumb.selected {
+  border-color: #0077ff;
+}
+
+/* ───── Terrain Controls ───── */
+#terrain-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 63px;
+  /* Match thumbs */
+  padding: 4px 6px;
+  font-size: 12px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  transition: border 0.2s;
+  box-sizing: border-box;
+  margin-bottom: -1px;
+  margin-left: -4px;
+}
+
+#terrain-controls label {
+  display: flex;
+  align-items: center;
+  height: 50%;
+}
+
+
+
+/* ─── ─── */
+
+.spacer {
+  /* width: 160px; */
+  display: none;
+  /* Erzwingt Breite für rechte Spalte */
+}
+
+
+/* slider */
+#scenario1-slider,
+#scenario8-slider,
+#scenario2-slider {
+  --progress: 0%;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #ccc var(--progress), orange var(--progress));
+  outline: none;
+}
+
+#scenario1-slider::-webkit-slider-thumb,
+#scenario8-slider::-webkit-slider-thumb,
+#scenario2-slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid orange;
+  cursor: pointer;
+  /* margin-top: -1px; */
+  /* zentrieren */
+}
+
+#scenario1-slider::-moz-range-thumb,
+#scenario8-slider::-moz-range-thumb,
+#scenario2-slider::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid orange;
+  cursor: pointer;
+}
+
+#scenario-legend-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+
+.legend-section-subtitle {
+  font-weight: 600;
+  font-size: 12px;
+  margin: 12px 10px 4px 10px;
+  color: #333;
+}
