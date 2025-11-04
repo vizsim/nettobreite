@@ -52,31 +52,6 @@ const WIDTH_RANGE_FILTERS = {
     ["has", "width_effective"],
     [">=", ["get", "width_effective"], 8]
   ],
-  "no-width": ["any",
-    // Fehlende width_effective
-    ["==", ["get", "width_effective"], null],
-    ["!", ["has", "width_effective"]],
-    // Missing flags (werden als schwarz dargestellt) - unterstützt verschiedene Datentypen
-    ["any",
-      ["==", ["get", "cycleway_missing"], true],
-      ["==", ["get", "cycleway_missing"], "true"],
-      ["==", ["get", "cycleway_missing"], 1]
-    ],
-    ["any",
-      ["==", ["get", "parking_missing"], true],
-      ["==", ["get", "parking_missing"], "true"],
-      ["==", ["get", "parking_missing"], 1]
-    ],
-    ["any",
-      ["==", ["get", "widths_missing"], true],
-      ["==", ["get", "widths_missing"], "true"],
-      ["==", ["get", "widths_missing"], 1]
-    ]
-  ],
-  "no-width-effective": ["any",
-    ["==", ["get", "width_effective"], null],
-    ["!", ["has", "width_effective"]]
-  ],
   "cycleway-missing": ["any",
     ["==", ["get", "cycleway_missing"], true],
     ["==", ["get", "cycleway_missing"], "true"],
@@ -122,22 +97,13 @@ function updateMapFilter(map, forceVisibility = false) {
     return;
   }
 
-  // Ensure layer is visible if forceVisibility is true or if we're updating filters
-  if (forceVisibility) {
-    map.setLayoutProperty("nettobreite", "visibility", "visible");
-  }
+  // Ensure layer is visible (some categories are enabled)
+  map.setLayoutProperty("nettobreite", "visibility", "visible");
 
-  // Build filter: show only enabled categories (inclusion strategy)
-  // This allows filtering to show only specific categories
+  // Build filter: pure inclusion strategy (no exclusions)
+  // Missing categories (schwarze) work independently - activated filters show all matching features
   const allRanges = Object.keys(WIDTH_RANGE_FILTERS);
   const enabledRanges = allRanges.filter(range => !disabledRanges.has(range));
-  
-  // Check which specific missing categories are disabled
-  // If "no-width" is disabled, also treat all missing subcategories as disabled
-  const isNoWidthDisabled = disabledRanges.has("no-width");
-  const disabledMissingCategories = ["cycleway-missing", "parking-missing", "widths-missing"].filter(
-    cat => disabledRanges.has(cat) || isNoWidthDisabled
-  );
   
   if (enabledRanges.length === 0) {
     // All categories disabled - hide layer
@@ -148,76 +114,31 @@ function updateMapFilter(map, forceVisibility = false) {
   if (enabledRanges.length === allRanges.length) {
     // All categories enabled - no filter needed
     map.setFilter("nettobreite", null);
-  } else {
-    // Build inclusion filters for enabled ranges
-    let inclusionFilters = enabledRanges.map(range => {
-      const filter = WIDTH_RANGE_FILTERS[range];
-      // Ensure filter is properly wrapped if it's not already an array
-      return Array.isArray(filter) ? filter : filter;
-    });
-    
-    // Build exclusion filters for disabled missing categories
-    // These must always be excluded, even if "no-width" is enabled
-    // We need to exclude ALL features that have these flags set, regardless of other conditions
-    const exclusionFilters = [];
-    
-    // If "no-width" is disabled, also exclude features without width_effective
-    if (isNoWidthDisabled) {
-      // Exclude features without width_effective
-      exclusionFilters.push(["!", ["any",
-        ["==", ["get", "width_effective"], null],
-        ["!", ["has", "width_effective"]]
-      ]]);
-    }
-    
-    for (const cat of disabledMissingCategories) {
-      // Create a direct exclusion filter for each missing flag
-      // This ensures ALL features with this flag are excluded, regardless of other properties
-      if (cat === "cycleway-missing") {
-        // Exclude features where cycleway_missing is true (any format: true, "true", or 1)
-        exclusionFilters.push(["!", ["any",
-          ["==", ["get", "cycleway_missing"], true],
-          ["==", ["get", "cycleway_missing"], "true"],
-          ["==", ["get", "cycleway_missing"], 1]
-        ]]);
-      } else if (cat === "parking-missing") {
-        // Exclude features where parking_missing is true (any format: true, "true", or 1)
-        exclusionFilters.push(["!", ["any",
-          ["==", ["get", "parking_missing"], true],
-          ["==", ["get", "parking_missing"], "true"],
-          ["==", ["get", "parking_missing"], 1]
-        ]]);
-      } else if (cat === "widths-missing") {
-        // Exclude features where widths_missing is true (any format: true, "true", or 1)
-        exclusionFilters.push(["!", ["any",
-          ["==", ["get", "widths_missing"], true],
-          ["==", ["get", "widths_missing"], "true"],
-          ["==", ["get", "widths_missing"], 1]
-        ]]);
-      }
-    }
-    
-    // Show features that match any of the enabled ranges, but exclude disabled missing categories
-    let finalFilter;
-    
-    if (inclusionFilters.length === 1) {
-      finalFilter = inclusionFilters[0];
-    } else {
-      // Combine all enabled filters with "any" to show features matching any enabled category
-      finalFilter = ["any", ...inclusionFilters];
-    }
-    
-    // Always exclude disabled missing categories
-    if (exclusionFilters.length > 0) {
-      if (exclusionFilters.length === 1) {
-        finalFilter = ["all", finalFilter, exclusionFilters[0]];
-      } else {
-        finalFilter = ["all", finalFilter, ...exclusionFilters];
-      }
-    }
-    
-    map.setFilter("nettobreite", finalFilter);
+    return;
   }
+  
+  // Build inclusion filters for enabled ranges (pure inclusion, no exclusions)
+  const inclusionFilters = enabledRanges.map(range => {
+    const filter = WIDTH_RANGE_FILTERS[range];
+    if (!filter || !Array.isArray(filter)) {
+      console.warn(`[FILTER] Invalid filter for range: ${range}`, filter);
+      return null;
+    }
+    return filter;
+  }).filter(filter => filter !== null); // Remove any invalid filters
+  
+  if (inclusionFilters.length === 0) {
+    // No valid filters - hide layer
+    map.setLayoutProperty("nettobreite", "visibility", "none");
+    return;
+  }
+  
+  // Combine all enabled filters with OR (pure inclusion strategy)
+  const finalFilter = inclusionFilters.length === 1
+    ? inclusionFilters[0]
+    : ["any", ...inclusionFilters];
+  
+  map.setFilter("nettobreite", finalFilter);
 }
 
 /**
@@ -231,34 +152,18 @@ export function refreshFilter(map) {
  * Toggles a width range category
  */
 function toggleWidthRange(map, rangeKey) {
+  // "no-width" is not toggleable - it's always visible but not clickable
+  if (rangeKey === "no-width") {
+    return;
+  }
+
   if (disabledRanges.has(rangeKey)) {
     disabledRanges.delete(rangeKey);
   } else {
     disabledRanges.add(rangeKey);
   }
 
-  // If "no-width" is toggled, also toggle subcategories
-  const subcategories = ["cycleway-missing", "parking-missing", "widths-missing"];
-  
-  if (rangeKey === "no-width") {
-    // When "no-width" is disabled, also disable subcategories
-    // When "no-width" is enabled, also enable subcategories
-    const isNoWidthDisabled = disabledRanges.has("no-width");
-    
-    subcategories.forEach(subCat => {
-      if (isNoWidthDisabled) {
-        disabledRanges.add(subCat);
-      } else {
-        disabledRanges.delete(subCat);
-      }
-      
-      // Update UI for subcategory
-      const subCategoryElement = document.querySelector(`[data-width-range="${subCat}"]`);
-      if (subCategoryElement) {
-        subCategoryElement.classList.toggle("disabled", isNoWidthDisabled);
-      }
-    });
-  }
+  // No automatic synchronization - missing categories work independently
 
   // Update UI
   const categoryElement = document.querySelector(`[data-width-range="${rangeKey}"]`);
