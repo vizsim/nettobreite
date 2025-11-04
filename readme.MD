@@ -1,39 +1,49 @@
-# ErreichbaRad Visualisierung
+# Nettobreite Visualisierung
 
-Visualisierung der Erreichbarkeitsanalyse für den Radverkehr in ländlichen Regionen am Beispiel für Brandenburg ( vielleicht bald auch ganz Deutschland)  
-Online verfügbar unter 👉 [https://vizsim.github.io/erreichbarad_viz](https://vizsim.github.io/erreichbarad_viz)
+Visualisierung der Straßennettobreite auf Basis von OpenStreetMap-Daten und der Berechnung des [Cycling Quality Index](https://www.osm-verkehrswende.org/cqi/)
 
 ---
 
 ## Hintergrund
 
-Dieses Repository enthält **nur die Visualisierung** der Ergebnisse aus  
-➡️ [radverkehr/erreichbarad](https://github.com/radverkehr/erreichbarad).
+Dieses Projekt visualisiert die effektive Straßennettobreite. Die Breitenwerte werden aus OpenStreetMap-Daten berechnet und mit der Methodik des Cycling Quality Index (CQI) ermittelt.
 
-Die zugrunde liegende Analyse und Datenaufbereitung erfolgt im Hauptprojekt,  
-dieses Repository stellt die Resultate interaktiv dar.
+Die Darstellung zeigt verschiedene Breitenkategorien farbcodiert auf einer interaktiven Karte, um die Qualität der Radinfrastruktur zu visualisieren.
+
+**Inspiration**: [OSM Diary Entry von Pieter Vander Vennet](https://www.openstreetmap.org/user/Pieter%20Vander%20Vennet/diary/407661)
+
+### Ziele
+
+- **Überholbreite für den Radverkehr darstellen** → Straßen identifizieren, wo de facto Überholverbot gilt
+- **QA für OSM-Mapping** → Qualitätssicherung für die OSM-Tags:
+  - `width` (Breite)
+  - `parking` (Straßenbegleitendes Parken)
 
 ---
 
-## Features
+## Bekannte Limitationen & Offene Punkte
 
-### 🚴‍♂️ **Erreichbarkeitsmodi**
-- **Bike**: Standard-Radverkehr
-- **Cargo Bike**: Lastenrad-Verkehr  
-- **My Bike**: Radverkehr mit bevorzugten Radwegen
-
-### 📊 **Interaktive Visualisierung**
-- **Koeffizienten-Raster**: Erreichbarkeitswerte je 100m Kachel
-- **Vergleichslayer**: Relative Unterschiede zwischen Modi
-- **Isochronen**: Fahrzeiten-Contours (5-30 Min)
-- **Attraktionspunkte**: POIs mit Kategorien
-
-
-### 🎛️ **Benutzerfreundliche Bedienung**
-- **Interaktive Legenden**: Klickbare Kategorien zum Ein-/Ausblenden
-- **Mouseover-Highlights**: Hover-Effekte für bessere Orientierung
-- **Permalink-Funktion**: Teilbare URLs mit Kartenposition
+- **CQI-Logik**: Unklar, ob die Logik von CQI zu 100% übernommen wurde
+- **Fehlende Tags**: Das Tag `parking:restriction` wird noch nicht berücksichtigt
+- **Default-Werte**: Der Umgang mit Default-Werten könnte optimiert werden
+- **Regionale Anpassung**: Unklar, ob die Default-Werte für ganz Deutschland passen
 
 
 ---
 
+## Datenquellen
+
+- **Quelle**: OpenStreetMap Contributors
+- **Datenstand**: 1.11.2025
+- **Methodik**: Cycling Quality Index (CQI) – [osm-verkehrswende.org/cqi/](https://www.osm-verkehrswende.org/cqi/)
+
+
+---
+
+## Technische Details
+
+- **Framework**: MapLibre GL JS
+- **Datenformat**: PMTiles
+- **Kartenbasis**: MapTiler (konfigurierbar)
+
+---

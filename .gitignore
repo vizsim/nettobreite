@@ -1,11 +1,11 @@
 .venv/
-data/
+#data/
 
 
 config.js
 
 *.tif
-*.pmtiles
+#*.pmtiles
 *.geojson
 *.geojson.gz
 *.pbf
