@@ -21,6 +21,20 @@ export function addSources(map, { MAPTILER_API_KEY, MAPILLARY_TOKEN }) {
  // addPMTilesSource("nettobreite", "demo_nettobreite.pmtiles");
   addPMTilesSource("nettobreite", "berlin_nettobreite.pmtiles");
 
+
+    // Mapillary
+    map.addSource("mapillary-images", {
+      type: "vector",
+      tiles: [
+        `https://tiles.mapillary.com/maps/vtp/mly1_public/2/{z}/{x}/{y}?access_token=${MAPILLARY_TOKEN}`
+      ],
+      minzoom: 14,
+      // maxzoom: 14.99
+      maxzoom: 14,
+    });
+
+    
+
   // Raster: Satellite ESRI
   map.addSource("satellite", {
     type: "raster",

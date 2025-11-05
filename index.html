@@ -119,6 +119,43 @@ MAIN HEADER
 
     <div class="legend-section-divider"></div>
 
+    <!-- ====================
+     Sektion: Helper/Straßenfotos
+======================= -->
+    <div class="legend-section" data-section="mapillary" style="display: block;">
+      <div class="legend-section-title section-toggle" data-section-id="mapillary"
+        style="display: flex; align-items: center; justify-content: space-between;">
+        <span>Helper/Straßenfotos</span>
+        <span class="toggle-arrow section-arrow open" data-arrow="mapillary"></span>
+      </div>
+      <div class="legend-section-content">
+
+        <div style="margin-top: 6px;">
+          <label style="margin-left: 10px;">
+            <input type="checkbox" id="toggle-mapillary" />
+            Mapillary-Bilder anzeigen
+            <span class="info-icon" title="Quelle: Mapillary Coverage – Lizenz: CC BY-SA 4.0">ⓘ</span>
+          </label>
+        </div>
+
+        <div id="mapillary-filter-options" style="display: none; margin-left: 32px; margin-top: 6px;">
+          <label style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+            <input type="checkbox" id="mapillary-nonpano" />
+            <span style="width: 12px; height: 12px; background: #00b955; border-radius: 2px;"></span>
+            normale Bilder
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px;">
+            <input type="checkbox" id="mapillary-pano" />
+            <span style="width: 12px; height: 12px; background: #0077ff; border-radius: 2px;"></span>
+            Panorama-Bilder
+          </label>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="legend-section-divider"></div>
+
     <div id="feature-count-wrapper"
       style="margin-top:10px; display: flex; justify-content: space-between; align-items: center; gap: 12px;">
       <div id="feature-count">

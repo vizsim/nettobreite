@@ -60,6 +60,69 @@ export function addLayers(map) {
     }
   });
 
+
+
+  
+
+  function addMapillaryLayer(map) {
+    // ⬇️ Soft halo for pano
+    map.addLayer({
+      id: "mapillary-images-halo",
+      type: "circle",
+      source: "mapillary-images",
+      "source-layer": "image",
+      minzoom: 14,
+      maxzoom: 21,
+      layout: {
+        visibility: "none"
+      },
+      filter: ["==", ["to-string", ["get", "is_pano"]], "true"],
+      paint: {
+        "circle-color": "#0077ff",
+        "circle-radius": [
+          "interpolate", ["linear"], ["zoom"],
+          14, 6,
+          15, 8,
+          17, 10
+        ],
+        "circle-opacity": 0.3
+      }
+    });
+
+    // ⬆️ Main circle on top
+    map.addLayer({
+      id: "mapillary-images-layer",
+      type: "circle",
+      source: "mapillary-images",
+      "source-layer": "image",
+      minzoom: 14,
+      maxzoom: 21,
+      layout: {
+        visibility: "none"
+      },
+      paint: {
+        "circle-color": [
+          "match",
+          ["to-string", ["get", "is_pano"]],
+          "true", "#0077ff",
+          "false", "#00b955",
+          "#999999"
+        ],
+        "circle-radius": [
+          "interpolate", ["linear"], ["zoom"],
+          14, 3,
+          16, 4,
+          17, 5
+        ]
+      }
+    });
+  }
+  
+  addMapillaryLayer(map);
+
+
+
+
   // Raster layers
   map.addLayer({
     id: "satellite-layer",

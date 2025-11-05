@@ -21,6 +21,9 @@ import { setupNettobreitePopups } from './js/ui/popupHandlers.js';
 // 📦 Width Legend Interactivity
 import { setupWidthLegendInteractivity, refreshFilter } from './js/ui/widthLegendInteractivity.js';
 
+// 📦 Mapillary
+import { setupMapillary } from './js/utils/useMapillary.js';
+
 // 📦 Permalink
 import { setupPermalink } from './js/utils/permalink.js';
 
@@ -83,6 +86,11 @@ async function initMap() {
     setupNettobreiteToggle(map);
     setupNettobreitePopups(map);
     setupWidthLegendInteractivity(map);
+    setupMapillary(map, {
+      originalMinZoom,
+      setCurrentZoomLock: z => currentZoomLock = z,
+      applyLegendVisibility
+    });
     setupEventHandlers(map);
   });
 }
