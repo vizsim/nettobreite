@@ -19,7 +19,7 @@ import { setupPhotonGeocoder } from './js/utils/geocoder.js';
 import { setupNettobreitePopups, setupWidthPopups } from './js/ui/popupHandlers.js';
 
 // 📦 Width Legend Interactivity
-import { setupWidthLegendInteractivity, refreshFilter } from './js/ui/widthLegendInteractivity.js';
+import { setupWidthLegendInteractivity, refreshFilter, setupWidthLayerLegendInteractivity } from './js/ui/widthLegendInteractivity.js';
 
 // 📦 Mapillary
 import { setupMapillary } from './js/utils/useMapillary.js';
@@ -88,6 +88,7 @@ async function initMap() {
     setupNettobreitePopups(map);
     setupWidthPopups(map);
     setupWidthLegendInteractivity(map);
+    setupWidthLayerLegendInteractivity(map);
     setupMapillary(map, {
       originalMinZoom,
       setCurrentZoomLock: z => currentZoomLock = z,

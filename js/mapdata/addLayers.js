@@ -62,7 +62,7 @@ export function addLayers(map) {
 
   // Add width line layer (showing OSM width or width:carriageway)
   // Uses width_base which is calculated from width:carriageway, width, or est_width
-  // Viridis color scale: 5 categories
+  // Inferno color scale: 5 categories between 5m and 11m
   map.addLayer({
     id: "width",
     type: "line",
@@ -81,17 +81,18 @@ export function addLayers(map) {
         // Wenn width_base nicht vorhanden: schwarz
         ["!", ["has", "width_base"]],
         "#000000",  // Schwarz für keine Breite angegeben
-        // Viridis color scale interpolation
+        // Inferno color scale interpolation (5m - 11m range)
+        // Starting further in the spectrum so <5m is already purple/pink
         [
           "interpolate",
           ["linear"],
           ["get", "width_base"],
-          0, "#440154",    // Dunkelviolett (sehr schmal)
-          3, "#31688e",    // Blau
-          4.5, "#35b779",  // Grün
-          6, "#90d743",    // Gelb-Grün
-          8, "#fde725",    // Gelb (breit)
-          15, "#fde725"    // Gelb (sehr breit)
+          0, "#8b2988",    // Lila (sehr schmal)
+          5, "#b73779",    // Rosa
+          7, "#db5c68",    // Rot-Orange
+          9, "#f98c09",    // Orange
+          11, "#fcce25",   // Gelb (breit)
+          20, "#fcce25"    // Gelb (sehr breit)
         ]
       ],
       "line-width": [

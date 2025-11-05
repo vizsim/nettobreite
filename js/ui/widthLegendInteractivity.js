@@ -198,3 +198,171 @@ export function setupWidthLegendInteractivity(map) {
   updateMapFilter(map);
 }
 
+// ============================================================================
+// Width Layer Interactivity (separate from nettobreite)
+// ============================================================================
+
+// Map of width ranges for the width layer (using width_base)
+const WIDTH_BASE_RANGE_FILTERS = {
+  "width-1": ["all",
+    ["has", "width_base"],
+    ["<", ["get", "width_base"], 5]
+  ],
+  "width-2": ["all",
+    ["has", "width_base"],
+    [">=", ["get", "width_base"], 5],
+    ["<", ["get", "width_base"], 7]
+  ],
+  "width-3": ["all",
+    ["has", "width_base"],
+    [">=", ["get", "width_base"], 7],
+    ["<", ["get", "width_base"], 9]
+  ],
+  "width-4": ["all",
+    ["has", "width_base"],
+    [">=", ["get", "width_base"], 9],
+    ["<", ["get", "width_base"], 11]
+  ],
+  "width-5": ["all",
+    ["has", "width_base"],
+    [">=", ["get", "width_base"], 11]
+  ],
+  "width-missing": ["!", ["has", "width_base"]]
+};
+
+// Track disabled width ranges for width layer
+let disabledWidthRanges = new Set();
+
+/**
+ * Updates the width layer filter based on currently disabled ranges
+ */
+function updateWidthLayerFilter(map) {
+  if (!map.getLayer("width")) {
+    return;
+  }
+
+  // Check if main toggle is enabled
+  const toggleCheckbox = document.getElementById("toggle-width");
+  const isToggleEnabled = toggleCheckbox ? toggleCheckbox.checked : false;
+
+  if (!isToggleEnabled) {
+    // Don't update filter if main toggle is disabled
+    return;
+  }
+
+  // If all ranges are disabled, hide the layer
+  if (disabledWidthRanges.size === Object.keys(WIDTH_BASE_RANGE_FILTERS).length) {
+    map.setLayoutProperty("width", "visibility", "none");
+    return;
+  }
+
+  // Ensure layer is visible (some categories are enabled)
+  map.setLayoutProperty("width", "visibility", "visible");
+
+  // Build filter: pure inclusion strategy
+  const allRanges = Object.keys(WIDTH_BASE_RANGE_FILTERS);
+  const enabledRanges = allRanges.filter(range => !disabledWidthRanges.has(range));
+  
+  if (enabledRanges.length === 0) {
+    // All categories disabled - hide layer
+    map.setLayoutProperty("width", "visibility", "none");
+    return;
+  }
+  
+  if (enabledRanges.length === allRanges.length) {
+    // All categories enabled - show all (with and without width_base)
+    map.setFilter("width", null);
+    return;
+  }
+  
+  // Build inclusion filters for enabled ranges
+  const inclusionFilters = enabledRanges.map(range => {
+    const filter = WIDTH_BASE_RANGE_FILTERS[range];
+    if (!filter || !Array.isArray(filter)) {
+      console.warn(`[FILTER] Invalid filter for width range: ${range}`, filter);
+      return null;
+    }
+    return filter;
+  }).filter(filter => filter !== null);
+  
+  if (inclusionFilters.length === 0) {
+    // No valid filters - hide layer
+    map.setLayoutProperty("width", "visibility", "none");
+    return;
+  }
+  
+  // Combine all enabled filters with OR
+  const finalFilter = inclusionFilters.length === 1
+    ? inclusionFilters[0]
+    : ["any", ...inclusionFilters];
+  
+  map.setFilter("width", finalFilter);
+}
+
+/**
+ * Toggles a width range category for the width layer
+ */
+function toggleWidthRangeForWidthLayer(map, rangeKey) {
+  if (!WIDTH_BASE_RANGE_FILTERS[rangeKey]) {
+    return; // Not a valid width range for width layer
+  }
+
+  if (disabledWidthRanges.has(rangeKey)) {
+    disabledWidthRanges.delete(rangeKey);
+  } else {
+    disabledWidthRanges.add(rangeKey);
+  }
+
+  // Update UI
+  const categoryElement = document.querySelector(`[data-width-range="${rangeKey}"]`);
+  if (categoryElement) {
+    categoryElement.classList.toggle("disabled", disabledWidthRanges.has(rangeKey));
+  }
+
+  // Update map filter
+  updateWidthLayerFilter(map);
+}
+
+/**
+ * Sets up click handlers for width legend categories (for width layer)
+ */
+export function setupWidthLayerLegendInteractivity(map) {
+  // Only get categories within the width section
+  const widthSection = document.querySelector('.legend-section[data-section="width"]');
+  if (!widthSection) {
+    return;
+  }
+
+  const categories = widthSection.querySelectorAll(".legend-category[data-width-range]");
+
+  categories.forEach(category => {
+    const rangeKey = category.dataset.widthRange;
+    
+    // Handle all width ranges including width-missing
+    if (WIDTH_BASE_RANGE_FILTERS[rangeKey]) {
+      category.addEventListener("click", () => {
+        toggleWidthRangeForWidthLayer(map, rangeKey);
+      });
+    }
+  });
+
+  // Initialize all categories as enabled
+  categories.forEach(category => {
+    const rangeKey = category.dataset.widthRange;
+    if (WIDTH_BASE_RANGE_FILTERS[rangeKey]) {
+      category.classList.remove("disabled");
+    }
+  });
+
+  // Ensure initial filter is set when toggle is enabled
+  const toggleCheckbox = document.getElementById("toggle-width");
+  if (toggleCheckbox) {
+    toggleCheckbox.addEventListener("change", () => {
+      updateWidthLayerFilter(map);
+    });
+  }
+  
+  // Ensure initial filter is clear
+  updateWidthLayerFilter(map);
+}
+
