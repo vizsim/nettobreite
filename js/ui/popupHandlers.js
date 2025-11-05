@@ -149,3 +149,55 @@ export function setupNettobreitePopups(map) {
     });
 }
 
+export function setupWidthPopups(map) {
+    const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false });
+    let clickedFeature = null;
+
+    const renderWidthTooltip = (props) => {
+        const widthBase = props.width_base ? parseFloat(props.width_base).toFixed(1) + ' m' : 'N/A';
+        return `<div style="font-size: 12px;">Breite: ${widthBase}</div>`;
+    };
+
+    map.on("mousemove", "width", (e) => {
+        if (window.popupsEnabled && !window.popupsEnabled()) return;
+        if (!clickedFeature) {
+            const html = renderWidthTooltip(e.features[0].properties);
+            popup.setLngLat(e.lngLat).setHTML(html).addTo(map);
+            map.getCanvas().style.cursor = "pointer";
+        }
+    });
+
+    map.on("mouseleave", "width", () => {
+        if (!clickedFeature) {
+            popup.remove();
+            map.getCanvas().style.cursor = "";
+        }
+    });
+
+    // Click to "pin" the popup
+    map.on("click", "width", (e) => {
+        if (window.popupsEnabled && !window.popupsEnabled()) return;
+        
+        const clickedProps = e.features[0].properties;
+        const clickedId = clickedProps.id || JSON.stringify(clickedProps);
+        
+        if (clickedFeature && clickedFeature.id === clickedId) {
+            clickedFeature = null;
+            popup.remove();
+        } else {
+            clickedFeature = { id: clickedId, props: clickedProps, lngLat: e.lngLat };
+            const html = renderWidthTooltip(clickedProps);
+            popup.setLngLat(e.lngLat).setHTML(html).addTo(map);
+        }
+    });
+
+    // Click elsewhere on the map to unpin
+    map.on("click", (e) => {
+        const features = map.queryRenderedFeatures(e.point, { layers: ["width"] });
+        if (features.length === 0 && clickedFeature) {
+            clickedFeature = null;
+            popup.remove();
+        }
+    });
+}
+

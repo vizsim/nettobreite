@@ -16,7 +16,7 @@ import {
 import { setupPhotonGeocoder } from './js/utils/geocoder.js';
 
 // 📦 Popups
-import { setupNettobreitePopups } from './js/ui/popupHandlers.js';
+import { setupNettobreitePopups, setupWidthPopups } from './js/ui/popupHandlers.js';
 
 // 📦 Width Legend Interactivity
 import { setupWidthLegendInteractivity, refreshFilter } from './js/ui/widthLegendInteractivity.js';
@@ -84,7 +84,9 @@ async function initMap() {
     setupUI(map);
     setupLegend(map);
     setupNettobreiteToggle(map);
+    setupWidthToggle(map);
     setupNettobreitePopups(map);
+    setupWidthPopups(map);
     setupWidthLegendInteractivity(map);
     setupMapillary(map, {
       originalMinZoom,
@@ -165,6 +167,24 @@ function setupNettobreiteToggle(map) {
         refreshFilter(map);
       } else {
         map.setLayoutProperty("nettobreite", "visibility", "none");
+      }
+    });
+  }
+}
+
+function setupWidthToggle(map) {
+  const toggleCheckbox = document.getElementById("toggle-width");
+
+  // Initial state - layer is hidden by default
+  if (map.getLayer("width")) {
+    map.setLayoutProperty("width", "visibility", "none");
+  }
+
+  if (toggleCheckbox) {
+    toggleCheckbox.addEventListener("change", () => {
+      const isVisible = toggleCheckbox.checked;
+      if (map.getLayer("width")) {
+        map.setLayoutProperty("width", "visibility", isVisible ? "visible" : "none");
       }
     });
   }

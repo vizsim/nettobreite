@@ -60,6 +60,53 @@ export function addLayers(map) {
     }
   });
 
+  // Add width line layer (showing OSM width or width:carriageway)
+  // Uses width_base which is calculated from width:carriageway, width, or est_width
+  // Viridis color scale: 5 categories
+  map.addLayer({
+    id: "width",
+    type: "line",
+    source: "nettobreite",
+    "source-layer": "nettobreite-lines",
+    minzoom: 9,
+    maxzoom: 22,
+    layout: {
+      visibility: "none", // Initially hidden
+      "line-cap": "round",
+      "line-join": "round"
+    },
+    paint: {
+      "line-color": [
+        "case",
+        // Wenn width_base nicht vorhanden: schwarz
+        ["!", ["has", "width_base"]],
+        "#000000",  // Schwarz für keine Breite angegeben
+        // Viridis color scale interpolation
+        [
+          "interpolate",
+          ["linear"],
+          ["get", "width_base"],
+          0, "#440154",    // Dunkelviolett (sehr schmal)
+          3, "#31688e",    // Blau
+          4.5, "#35b779",  // Grün
+          6, "#90d743",    // Gelb-Grün
+          8, "#fde725",    // Gelb (breit)
+          15, "#fde725"    // Gelb (sehr breit)
+        ]
+      ],
+      "line-width": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        9, 0.4,
+        12, 1.6,
+        15, 5,
+        18, 8
+      ],
+      "line-opacity": 0.8
+    }
+  });
+
 
 
   

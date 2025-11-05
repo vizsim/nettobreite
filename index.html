@@ -118,7 +118,57 @@ MAIN HEADER
     </div>
 
     <div class="legend-section-divider"></div>
+    <!-- ====================
+     Sektion: Breite width / width:carriageway
+======================= -->
+<div class="legend-section collapsed" data-section="width" style="display: block;">
+  <div class="legend-section-title section-toggle" data-section-id="width"
+    style="display: flex; align-items: center; justify-content: space-between;">
+    <span>Breite <code>width</code> bzw <code>width:carriageway</code></span>
+    <span class="toggle-arrow section-arrow" data-arrow="width"></span>
+  </div>
+  <div class="legend-section-content">
+    <div style="margin-top: 6px;">
+      <label style="margin-left: 10px;">
+        <input type="checkbox" id="toggle-width" />
+        Breite anzeigen
+      </label>
+    </div>
+    
+    <!-- Farb-Legende -->
+    <div style="margin-left: 20px; margin-top: 12px; font-size: 11px;">
+      <div style="font-weight: bold; margin-bottom: 8px;">Breite <code>width</code> / <code>width:carriageway</code> (in m)</div>
+      <div style="margin-top: 8px;">
+        <div class="legend-category" data-width-range="width-1" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
+          <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#440154;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+          <span class="legend-text">&lt; 3 m</span>
+        </div>
+        <div class="legend-category" data-width-range="width-2" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
+          <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#31688e;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+          <span class="legend-text">3 – 4.5 m</span>
+        </div>
+        <div class="legend-category" data-width-range="width-3" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
+          <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#35b779;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+          <span class="legend-text">4.5 – 6 m</span>
+        </div>
+        <div class="legend-category" data-width-range="width-4" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
+          <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#90d743;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+          <span class="legend-text">6 – 8 m</span>
+        </div>
+        <div class="legend-category" data-width-range="width-5" style="display: flex; align-items: center; margin-bottom: 4px; cursor: pointer;">
+          <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#fde725;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+          <span class="legend-text">&gt; 8 m</span>
+        </div>
+        <div class="legend-category" style="display: flex; align-items: center; margin-bottom: 4px;">
+          <span class="legend-color" style="display:inline-block;width:24px;height:4px;background:#000000;border:1px solid #ccc;margin-right:8px;border-radius:2px;"></span>
+          <span class="legend-text">Fehlende Angaben</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="legend-section-divider"></div>
     <!-- ====================
      Sektion: Helper/Straßenfotos
 ======================= -->
@@ -155,6 +205,8 @@ MAIN HEADER
     </div>
 
     <div class="legend-section-divider"></div>
+
+
 
     <div id="feature-count-wrapper"
       style="margin-top:10px; display: flex; justify-content: space-between; align-items: center; gap: 12px;">
