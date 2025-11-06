@@ -17,23 +17,81 @@
     <!-- ====================
 MAIN HEADER
 ======================= -->
-    <div class="legend-header legend-title" data-toggle="legend-root">
+    <div class="legend-header legend-title" data-toggle="legend-root" style="position: relative;">
       <div style="flex-grow: 1;">
         <div class="legend-heading">
           <span>Nettobreite</span>
           <img src="expand-horizontal-svgrepo-com.svg" alt="width">
         </div>
         <div class="legend-subtext">
-          Straßennettobreite-Darstellung auf Basis von OSM-Daten<span class="info-icon" title="Quelle: OpenStreetMap Contributors – Datenstand: 1.11.2025">ⓘ</span> <br>
+          Straßennettobreite-Darstellung auf Basis von OSM-Daten<span class="info-icon" title="Quelle: OpenStreetMap Contributors – Datenstand: 5.11.2025">ⓘ</span> <br>
           und der Berechnung von 
           <a href="https://www.osm-verkehrswende.org/cqi/" target="_blank" rel="noopener noreferrer">Cycling Quality Index</a>
           
         </div>
       </div>
+      <div style="position: absolute; top: 0; right: 0; display: flex; align-items: center;">
+        <img src="https://img.shields.io/badge/Status-Experimental-red" alt="Status: Experimental"
+          style="height: 18px; width: auto; display: block;">
+      </div>
       <span class="toggle-arrow toggle-root open" data-arrow="legend-root"></span>
     </div>
 
     <div class="legend-section-divider"></div>
+
+
+        <!-- ====================
+     Sektion: Definition
+======================= -->
+<div class="legend-section collapsed" data-section="definition" style="display: block;">
+  <div class="legend-section-title section-toggle" data-section-id="definition"
+    style="display: flex; align-items: center; justify-content: space-between;">
+    <span>Definition</span>
+    <span class="toggle-arrow section-arrow" data-arrow="definition"></span>
+  </div>
+  <div class="legend-section-content">
+    <div style="margin-top: 6px; margin-left: 10px; font-size: 12px; line-height: 1.6;">
+      <p style="margin: 0 0 8px 0;">
+        Im Grunde gibt es zwei übergeordnete Arten von Breitenangaben an highways:
+      </p>
+      <p style="margin: 0 0 6px 0; font-weight: bold;">
+        Breite von Bordstein zu Bordstein:
+      </p>
+      <ul style="margin: 0 0 12px 20px;">
+        <li><code><a href="https://wiki.openstreetmap.org/wiki/Key:width#Width_of_streets" target="_blank" rel="noopener noreferrer">width</a></code></li>
+        <li><code><a href="https://wiki.openstreetmap.org/wiki/Key:width:carriageway" target="_blank" rel="noopener noreferrer">width:carriageway</a></code></li>
+      </ul>
+      <p style="margin: 0 0 6px 0; font-weight: bold;">
+        Nettobreite (nutzbare Breite):
+      </p>
+      <ul style="margin: 0 0 12px 20px;">
+        <li><code><a href="https://wiki.openstreetmap.org/wiki/Key:width:effective" target="_blank" rel="noopener noreferrer">width:effective</a></code> – nutzbare Breite abzüglich Parken und Radwege o.ä.</li>
+      </ul>
+      <div style="margin-top: 12px;">
+        <a href="https://wiki.openstreetmap.org/wiki/File:Width_effective_parking.png" target="_blank" rel="noopener noreferrer" title="Quelle: OpenStreetMap Wiki">
+          <img src="https://wiki.openstreetmap.org/w/images/c/c0/Width_effective_parking.png" 
+               alt="Width effective parking illustration" 
+               style="max-width: 80%; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+        </a>
+        <p style="margin: 4px 0 0 0; font-size: 10px; color: #666;">
+          Quelle: <a href="https://wiki.openstreetmap.org/wiki/File:Width_effective_parking.png" target="_blank" rel="noopener noreferrer">OpenStreetMap Wiki</a><br>
+          Attribution: <a href="https://www.openstreetmap.org/user/Supaplex030" target="_blank" rel="noopener noreferrer">Supaplex030</a>
+        </p>
+      </div>
+      <div style="margin-top: 16px;">
+        <p style="margin: 0 0 6px 0; font-weight: bold; font-size: 13px;">
+          Problem:
+        </p>
+        <p style="margin: 0; font-size: 12px; line-height: 1.6;">
+          Häufig ist der Tag <code>width</code> in OSM vergeben, der Mapper meinte aber <code>width:effective</code>, damit wird die berechnete Nettobreite total unterschätzt. Diese Fälle findet man aber hier gut unter "Effektive Breite &lt; 2 m – Wert nicht plausibel" (grau).
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend-section-divider"></div>
+
 
     <!-- ====================
      Sektion: Nettobreite Layer
@@ -41,7 +99,7 @@ MAIN HEADER
     <div class="legend-section" data-section="nettobreite">
       <div class="legend-section-title section-toggle" data-section-id="nettobreite"
         style="display: flex; align-items: center; justify-content: space-between;">
-        <span>Nettobreite</span>
+        <span title="Errechnete Nettobreite oder falls gegeben 'effective:width' direkt aus OSM">Nettobreite</span>
         <span class="toggle-arrow section-arrow open" data-arrow="nettobreite"></span>
       </div>
       <div class="legend-section-content">
@@ -118,13 +176,15 @@ MAIN HEADER
     </div>
 
     <div class="legend-section-divider"></div>
+
+
     <!-- ====================
      Sektion: Breite width / width:carriageway
 ======================= -->
 <div class="legend-section collapsed" data-section="width" style="display: block;">
   <div class="legend-section-title section-toggle" data-section-id="width"
     style="display: flex; align-items: center; justify-content: space-between;">
-    <span>Breite</span>
+    <span title="'width' oder 'width:carriageway' direkt aus OSM">Breite</span>
     <span class="toggle-arrow section-arrow" data-arrow="width"></span>
   </div>
   <div class="legend-section-content">
@@ -213,10 +273,25 @@ MAIN HEADER
       <div id="feature-count">
         <div>Zoomlevel: ...</div>
       </div>
-      <a href="https://github.com/vizsim/nettobreite" target="_blank" title="Fehler melden oder Feedback geben">
-        <img src="https://img.shields.io/badge/Status-Experimental-red" alt="Status: Experimental"
-          style="height: 20px;">
-      </a>
+      <div style="display: flex; align-items: center; gap: 8px;">
+          <a href="https://github.com/vizsim/nettobreite" target="_blank" rel="noopener noreferrer" 
+             title="GitHub Repository" 
+             style="display: inline-flex; align-items: center; text-decoration: none; color: #24292f;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle;">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/vizsim/nettobreite/issues" target="_blank" rel="noopener noreferrer" 
+             title="Fehler melden oder Feedback geben"
+             style="display: inline-flex; align-items: center; text-decoration: none; color: #24292f; font-size: 12px;">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="vertical-align: middle; margin-right: 4px;">
+              <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/>
+              <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"/>
+            </svg>
+            Issues
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 

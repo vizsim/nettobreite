@@ -27,14 +27,14 @@ Die Darstellung zeigt verschiedene Breitenkategorien farbcodiert auf einer inter
 - **Fehlende Tags**: Das Tag `parking:restriction` wird noch nicht berücksichtigt
 - **Default-Werte**: Der Umgang mit Default-Werten könnte optimiert werden
 - **Regionale Anpassung**: Unklar, ob die Default-Werte für ganz Deutschland passen
-
+- siehe [issues](https://github.com/vizsim/nettobreite/issues)
 
 ---
 
 ## Datenquellen
 
 - **Quelle**: OpenStreetMap Contributors
-- **Datenstand**: 1.11.2025
+- **Datenstand**: 5.11.2025
 - **Methodik**: Cycling Quality Index (CQI) – [osm-verkehrswende.org/cqi/](https://www.osm-verkehrswende.org/cqi/)
 
 

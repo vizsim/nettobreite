@@ -41,59 +41,58 @@ export function setupNettobreitePopups(map) {
         const cyclewayRightOnlane = props.cycleway_right_onlane_m ? parseFloat(props.cycleway_right_onlane_m).toFixed(1) + ' m' : '0 m';
 
         return `
-    <div style="font-size: 12px; max-width: 300px;">
+    <div style="font-size: 12px; max-width: 300px; line-height: 1.3;">
         <!-- Breiteninformationen -->
-        <div style="margin-bottom: 12px;">
-            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 13px;">
+        <div style="margin-bottom: 8px;">
+            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 3px; font-size: 13px;">
                 📏 Breiteninformationen
             </div>
             <table style="border-collapse: collapse; width: 100%; font-size: 11px;">
-                <tr><td style="padding: 2px 0;"><strong>Breite (explizit)</strong></td><td style="padding: 2px 0; text-align: right;">${width}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Breite (Basis)</strong></td><td style="padding: 2px 0; text-align: right;">${widthBase}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Breite (effektiv)</strong></td><td style="padding: 2px 0; text-align: right;">${widthEffective}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Breite (explizit)</strong></td><td style="padding: 1px 0; text-align: right;">${width}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Nettobreite</strong></td><td style="padding: 1px 0; text-align: right;">${widthEffective}</td></tr>
             </table>
         </div>
 
         <!-- Parkplatzinformationen -->
-        <div style="margin-bottom: 12px;">
-            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 13px;">
+        <div style="margin-bottom: 8px;">
+            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 3px; font-size: 13px;">
                 🅿️ Parkplatzinformationen
             </div>
             <table style="border-collapse: collapse; width: 100%; font-size: 11px;">
-                <tr><td style="padding: 2px 0;"><strong>Parken links</strong></td><td style="padding: 2px 0; text-align: right;">${parkingLeft}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Parken rechts</strong></td><td style="padding: 2px 0; text-align: right;">${parkingRight}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Orientierung links</strong></td><td style="padding: 2px 0; text-align: right;">${parkingLeftOrientation}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Orientierung rechts</strong></td><td style="padding: 2px 0; text-align: right;">${parkingRightOrientation}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Parkplatz links (Spur)</strong></td><td style="padding: 2px 0; text-align: right;">${parkingLeftOnlane}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Parkplatz rechts (Spur)</strong></td><td style="padding: 2px 0; text-align: right;">${parkingRightOnlane}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Parken links</strong></td><td style="padding: 1px 0; text-align: right;">${parkingLeft}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Parken rechts</strong></td><td style="padding: 1px 0; text-align: right;">${parkingRight}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Orientierung links</strong></td><td style="padding: 1px 0; text-align: right;">${parkingLeftOrientation}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Orientierung rechts</strong></td><td style="padding: 1px 0; text-align: right;">${parkingRightOrientation}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Parkplatz links (Spur)</strong></td><td style="padding: 1px 0; text-align: right;">${parkingLeftOnlane}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Parkplatz rechts (Spur)</strong></td><td style="padding: 1px 0; text-align: right;">${parkingRightOnlane}</td></tr>
             </table>
         </div>
 
         <!-- Radweginformationen -->
-        <div style="margin-bottom: 12px;">
-            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 13px;">
+        <div style="margin-bottom: 8px;">
+            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 3px; font-size: 13px;">
                 🚴 Radweginformationen
             </div>
             <table style="border-collapse: collapse; width: 100%; font-size: 11px;">
-                <tr><td style="padding: 2px 0;"><strong>Radweg links</strong></td><td style="padding: 2px 0; text-align: right;">${cyclewayLeft}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Radweg rechts</strong></td><td style="padding: 2px 0; text-align: right;">${cyclewayRight}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Radweg links (Spur)</strong></td><td style="padding: 2px 0; text-align: right;">${cyclewayLeftOnlane}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Radweg rechts (Spur)</strong></td><td style="padding: 2px 0; text-align: right;">${cyclewayRightOnlane}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Radweg links</strong></td><td style="padding: 1px 0; text-align: right;">${cyclewayLeft}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Radweg rechts</strong></td><td style="padding: 1px 0; text-align: right;">${cyclewayRight}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Radweg links (Spur)</strong></td><td style="padding: 1px 0; text-align: right;">${cyclewayLeftOnlane}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Radweg rechts (Spur)</strong></td><td style="padding: 1px 0; text-align: right;">${cyclewayRightOnlane}</td></tr>
             </table>
         </div>
 
         <!-- Straßeninformationen -->
-        <div style="margin-bottom: 12px;">
-            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 6px; font-size: 13px;">
+        <div style="margin-bottom: 8px;">
+            <div style="font-weight: bold; color: #2c3e50; margin-bottom: 3px; font-size: 13px;">
                 🛣️ Straßeninformationen
             </div>
             <table style="border-collapse: collapse; width: 100%; font-size: 11px;">
-                <tr><td style="padding: 2px 0;"><strong>Highway</strong></td><td style="padding: 2px 0; text-align: right;">${highway}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Einbahnstraße</strong></td><td style="padding: 2px 0; text-align: right;">${oneway}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>OSM ID</strong></td><td style="padding: 2px 0; text-align: right;">${id !== 'N/A' ? `<a href="https://www.openstreetmap.org/way/${id}" target="_blank" style="color: #0066cc; text-decoration: none;">${id}</a>` : id}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Cycleway fehlt</strong></td><td style="padding: 2px 0; text-align: right;">${cyclewayMissing}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Parking fehlt</strong></td><td style="padding: 2px 0; text-align: right;">${parkingMissing}</td></tr>
-                <tr><td style="padding: 2px 0;"><strong>Widths fehlt</strong></td><td style="padding: 2px 0; text-align: right;">${widthsMissing}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Highway</strong></td><td style="padding: 1px 0; text-align: right;">${highway}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Einbahnstraße</strong></td><td style="padding: 1px 0; text-align: right;">${oneway}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>OSM ID</strong></td><td style="padding: 1px 0; text-align: right;">${id !== 'N/A' ? `<a href="https://www.openstreetmap.org/way/${id}" target="_blank" style="color: #0066cc; text-decoration: none;">${id}</a>` : id}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Cycleway fehlt</strong></td><td style="padding: 1px 0; text-align: right;">${cyclewayMissing}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Parking fehlt</strong></td><td style="padding: 1px 0; text-align: right;">${parkingMissing}</td></tr>
+                <tr><td style="padding: 1px 0;"><strong>Widths fehlt</strong></td><td style="padding: 1px 0; text-align: right;">${widthsMissing}</td></tr>
             </table>
         </div>
     </div>
