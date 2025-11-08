@@ -34,7 +34,7 @@ Die Darstellung zeigt verschiedene Breitenkategorien farbcodiert auf einer inter
 ## Datenquellen
 
 - **Quelle**: OpenStreetMap Contributors
-- **Datenstand**: 5.11.2025
+- **Datenstand**: 7.11.2025
 - **Methodik**: Cycling Quality Index (CQI) – [osm-verkehrswende.org/cqi/](https://www.osm-verkehrswende.org/cqi/)
 
 
