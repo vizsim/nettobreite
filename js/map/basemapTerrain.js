@@ -2,8 +2,7 @@
 //
 // Basemap-/Terrain-Handling OHNE MapTiler (kein API-Key). Übernommen aus der
 // Blaupause (vizsim/unfallkarte, Ursprung vizsim/gradients2osm):
-//   - Basis bleibt das lokale Positron-`style.json` (Vektorquelle "openmaptiles",
-//     jetzt über OpenFreeMap).
+//   - Basis ist der gehostete OpenFreeMap-Positron-Style (Vektorquelle "openmaptiles").
 //   - Raster-Basemaps OSM Carto + Esri werden als Layer ein-/ausgeblendet.
 //   - Terrain/Hillshade via Mapterhorn (raster-dem, terrarium), 3D-Gebäude via
 //     OpenFreeMap-Planet.

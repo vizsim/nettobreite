@@ -63,7 +63,9 @@ async function initMap() {
 
   window.map = new maplibregl.Map({
     container: "map",
-    style: "./style.json",
+    // Keyless Basemap: gehosteter OpenFreeMap-Positron-Style (Tiles+Sprite+Glyphs).
+    // Ersetzt das früher lokal vendorte style.json (war nur noch vanilla Positron).
+    style: "https://tiles.openfreemap.org/styles/positron",
     center: [13.42113, 52.47676], // Default center
     zoom: 12,                  // Default zoom
     minZoom: 9,
