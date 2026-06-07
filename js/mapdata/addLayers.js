@@ -168,28 +168,6 @@ export function addLayers(map) {
   
   addMapillaryLayer(map);
 
-
-
-
-  // Raster layers
-  map.addLayer({
-    id: "satellite-layer",
-    type: "raster",
-    source: "satellite",
-    layout: { visibility: "none" }
-  }, "nettobreite");
-
-  // Hillshade layer
-  map.addLayer({
-    id: "hillshade-layer",
-    type: "raster",
-    source: "hillshade",
-    layout: { visibility: "none" },
-    paint: {
-      "raster-opacity": 0.3
-    }
-  });
-
-  // Disable terrain initially
-  map.setTerrain(null);
+  // Raster-Basemaps + Terrain/Hillshade werden in js/map/basemapTerrain.js
+  // (addBasemapTerrain, nach addLayers aufgerufen) keyless hinzugefügt.
 }

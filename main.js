@@ -3,8 +3,11 @@ import { addSources } from "./js/mapdata/addSources.js";
 import { addLayers } from "./js/mapdata/addLayers.js";
 
 // 📦 UI & Interaktion
-import { setupBaseLayerControls } from './js/ui/setupBaseLayerControls.js';
 import { setupLayerToggles } from './js/ui/setupLayerToggles.js';
+
+// 📦 Basemap/Terrain (keyless) + Datenstand
+import { addBasemapTerrain, setBasemap, setRelief, setBuildings } from './js/map/basemapTerrain.js';
+import { applyDataVintages } from './js/utils/applyDataVintages.js';
 
 // 📦 Legende
 import {
@@ -41,12 +44,6 @@ const isLocalhost = location.hostname === "localhost";
 
 // Setup popup toggle (global state for popup handlers)
 window.popupsEnabled = () => true; // Always enabled for now
-
-document.querySelector('[data-map="standard"]').style.backgroundImage =
-  "url('./thumbs/thumb-standard.png')";
-
-document.querySelector('[data-map="satellite"]').style.backgroundImage =
-  "url('./thumbs/thumb-satellite.png')";
 
 (async () => {
   try {
@@ -95,7 +92,35 @@ async function initMap() {
       applyLegendVisibility
     });
     setupEventHandlers(map);
+    setupMapPanel(map);
+    applyDataVintages();
   });
+}
+
+// Karten-Panel unten links: Basemap-Umschalter + Relief/3D-Toggles (keyless).
+function setupMapPanel(map) {
+  const panel = document.getElementById('map-settings-panel');
+  const panelToggle = document.getElementById('map-settings-toggle');
+  if (panelToggle && panel) {
+    panelToggle.addEventListener('click', () => {
+      const collapsed = panel.classList.toggle('is-collapsed');
+      panelToggle.setAttribute('aria-expanded', String(!collapsed));
+    });
+  }
+
+  document.querySelectorAll('.basemap-btn[data-basemap]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setBasemap(map, btn.dataset.basemap);
+      document.querySelectorAll('.basemap-btn').forEach((b) => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  const reliefToggle = document.getElementById('toggle-relief');
+  if (reliefToggle) reliefToggle.addEventListener('change', (e) => setRelief(map, e.target.checked));
+
+  const buildingsToggle = document.getElementById('toggle-buildings');
+  if (buildingsToggle) buildingsToggle.addEventListener('change', (e) => setBuildings(map, e.target.checked));
 }
 
 function addNavigationControl(map) {
@@ -133,7 +158,6 @@ function setupLegend(map) {
 }
 
 function setupUI(map) {
-  setupBaseLayerControls(map, isInitializingRef);
   setupLayerToggles(
     map,
     originalMinZoom,
@@ -214,18 +238,7 @@ function initializeMapModules(map) {
   addNavigationControl(map);
   addSources(map, { MAPILLARY_TOKEN, MAPTILER_API_KEY });
   addLayers(map);
+  // Basemap-Umschalter + Mapterhorn-Relief/3D NACH addSources/addLayers (Symbol-
+  // Reihenfolge steht dann); ersetzt die alten MapTiler-Terrain/Hillshade-Handler.
+  addBasemapTerrain(map);
 }
-
-// Toggle logic for Hillshade and Terrain
-document.getElementById('toggleHillshade').addEventListener('change', (e) => {
-  const visibility = e.target.checked ? 'visible' : 'none';
-  map.setLayoutProperty('hillshade-layer', 'visibility', visibility);
-});
-
-document.getElementById('toggleTerrain').addEventListener('change', (e) => {
-  if (e.target.checked) {
-    map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
-  } else {
-    map.setTerrain(null);
-  }
-});
