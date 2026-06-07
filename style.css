@@ -69,14 +69,12 @@ code {
 }
 
 /* ───── Popup Styles ───── */
-.reachability-popup .maplibregl-popup-content {
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid #ddd;
-}
-
-.reachability-popup .maplibregl-popup-tip {
-  border-top-color: #fff;
+/* Feature-Popups (Standard-maplibre-Popup) — dezent gerundet, passend zum Panel */
+.maplibregl-popup-content {
+  border-radius: 14px;
+  border: 1px solid #e3e5e9;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  padding: 12px 14px;
 }
 
 #map {
@@ -146,8 +144,9 @@ code {
   background: white;
   padding: 10px;
   font-size: 12px;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  border: 1px solid #e3e5e9;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
   /* overflow-y: auto; */
   overflow-y: scroll;
   scrollbar-gutter: stable;
