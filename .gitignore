@@ -1,5 +1,7 @@
 .venv/
-#data/
+# data/ ist ein Symlink -> pipeline/data (gitignored). Roh- + abgeleitete Artefakte
+# liegen lokal + auf B2, nicht im Git.
+/data
 
 
 config.js

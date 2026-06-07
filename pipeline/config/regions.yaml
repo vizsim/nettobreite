@@ -1,0 +1,19 @@
+# Skalierungs-Registry ⭐ — Neue Region/Bundesland/Deutschland = EIN Block, kein Code-Edit.
+# (Pendant zu accidents.yaml/years aus unfallkarte-2026.)
+# Scope JETZT: nur Berlin lauffähig.
+default_region: berlin
+regions:
+  berlin:
+    url: "https://download.geofabrik.de/europe/germany/berlin-latest.osm.pbf"
+    pbf: "berlin-latest.osm.pbf"
+    crs_metric: "EPSG:25833"        # UTM 33N (Berlin/Brandenburg) — derzeit ungenutzt (Breite ist attributbasiert)
+    center: [13.404, 52.520]        # optional, fürs Frontend
+    # bbox/zoom optional
+  # brandenburg:
+  #   url: "https://download.geofabrik.de/europe/germany/brandenburg-latest.osm.pbf"
+  #   pbf: "brandenburg-latest.osm.pbf"
+  #   crs_metric: "EPSG:25833"
+  # germany:
+  #   url: "https://download.geofabrik.de/europe/germany-latest.osm.pbf"
+  #   pbf: "germany-latest.osm.pbf"
+  #   crs_metric: "EPSG:25832"       # UTM 32N (DE-weiter Default)

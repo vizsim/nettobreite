@@ -3,8 +3,11 @@ import { addSources } from "./js/mapdata/addSources.js";
 import { addLayers } from "./js/mapdata/addLayers.js";
 
 // 📦 UI & Interaktion
-import { setupBaseLayerControls } from './js/ui/setupBaseLayerControls.js';
 import { setupLayerToggles } from './js/ui/setupLayerToggles.js';
+
+// 📦 Basemap/Terrain (keyless) + Datenstand
+import { addBasemapTerrain, setBasemap, setRelief, setBuildings } from './js/map/basemapTerrain.js';
+import { applyDataVintages } from './js/utils/applyDataVintages.js';
 
 // 📦 Legende
 import {
@@ -27,7 +30,6 @@ import { setupMapillary } from './js/utils/useMapillary.js';
 // 📦 Permalink
 import { setupPermalink } from './js/utils/permalink.js';
 
-let MAPTILER_API_KEY = '';
 let MAPILLARY_TOKEN = '';
 
 let originalMinZoom = 9;
@@ -35,23 +37,15 @@ let originalMaxZoom = 20;
 
 let currentZoomLock = null;
 
-const isInitializingRef = { value: true };
-
 const isLocalhost = location.hostname === "localhost";
 
 // Setup popup toggle (global state for popup handlers)
 window.popupsEnabled = () => true; // Always enabled for now
 
-document.querySelector('[data-map="standard"]').style.backgroundImage =
-  "url('./thumbs/thumb-standard.png')";
-
-document.querySelector('[data-map="satellite"]').style.backgroundImage =
-  "url('./thumbs/thumb-satellite.png')";
-
 (async () => {
   try {
     const config = await import(isLocalhost ? './js/config/config.js' : './js/config/config.public.js');
-    ({ MAPTILER_API_KEY, MAPILLARY_TOKEN } = config);
+    ({ MAPILLARY_TOKEN } = config);
     console.log(`🔑 ${isLocalhost ? "Lokale config.js" : "config.public.js"} geladen`);
 
     initMap();
@@ -63,13 +57,15 @@ document.querySelector('[data-map="satellite"]').style.backgroundImage =
 
 async function initMap() {
   // Load pmtiles protocol
-  const pmtilesBaseURL = "https://f003.backblazeb2.com/file/nettobreite/";
+  const pmtilesBaseURL = "https://tiles.vizsim.de/file/nettobreite/";
   const protocol = new pmtiles.Protocol(name => `${pmtilesBaseURL}${name}`);
   maplibregl.addProtocol("pmtiles", protocol.tile);
 
   window.map = new maplibregl.Map({
     container: "map",
-    style: "./style.json",
+    // Keyless Basemap: gehosteter OpenFreeMap-Positron-Style (Tiles+Sprite+Glyphs).
+    // Ersetzt das früher lokal vendorte style.json (war nur noch vanilla Positron).
+    style: "https://tiles.openfreemap.org/styles/positron",
     center: [13.42113, 52.47676], // Default center
     zoom: 12,                  // Default zoom
     minZoom: 9,
@@ -95,7 +91,35 @@ async function initMap() {
       applyLegendVisibility
     });
     setupEventHandlers(map);
+    setupMapPanel(map);
+    applyDataVintages();
   });
+}
+
+// Karten-Panel unten links: Basemap-Umschalter + Relief/3D-Toggles (keyless).
+function setupMapPanel(map) {
+  const panel = document.getElementById('map-settings-panel');
+  const panelToggle = document.getElementById('map-settings-toggle');
+  if (panelToggle && panel) {
+    panelToggle.addEventListener('click', () => {
+      const collapsed = panel.classList.toggle('is-collapsed');
+      panelToggle.setAttribute('aria-expanded', String(!collapsed));
+    });
+  }
+
+  document.querySelectorAll('.basemap-btn[data-basemap]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      setBasemap(map, btn.dataset.basemap);
+      document.querySelectorAll('.basemap-btn').forEach((b) => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+
+  const reliefToggle = document.getElementById('toggle-relief');
+  if (reliefToggle) reliefToggle.addEventListener('change', (e) => setRelief(map, e.target.checked));
+
+  const buildingsToggle = document.getElementById('toggle-buildings');
+  if (buildingsToggle) buildingsToggle.addEventListener('change', (e) => setBuildings(map, e.target.checked));
 }
 
 function addNavigationControl(map) {
@@ -133,7 +157,6 @@ function setupLegend(map) {
 }
 
 function setupUI(map) {
-  setupBaseLayerControls(map, isInitializingRef);
   setupLayerToggles(
     map,
     originalMinZoom,
@@ -212,20 +235,9 @@ function setupEventHandlers(map) {
 function initializeMapModules(map) {
   setupPhotonGeocoder(map);
   addNavigationControl(map);
-  addSources(map, { MAPILLARY_TOKEN, MAPTILER_API_KEY });
+  addSources(map, { MAPILLARY_TOKEN });
   addLayers(map);
+  // Basemap-Umschalter + Mapterhorn-Relief/3D NACH addSources/addLayers (Symbol-
+  // Reihenfolge steht dann); ersetzt die alten MapTiler-Terrain/Hillshade-Handler.
+  addBasemapTerrain(map);
 }
-
-// Toggle logic for Hillshade and Terrain
-document.getElementById('toggleHillshade').addEventListener('change', (e) => {
-  const visibility = e.target.checked ? 'visible' : 'none';
-  map.setLayoutProperty('hillshade-layer', 'visibility', visibility);
-});
-
-document.getElementById('toggleTerrain').addEventListener('change', (e) => {
-  if (e.target.checked) {
-    map.setTerrain({ source: 'terrain', exaggeration: 1.5 });
-  } else {
-    map.setTerrain(null);
-  }
-});

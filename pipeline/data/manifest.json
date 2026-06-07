@@ -1,0 +1,15 @@
+{
+  "nettobreite_berlin": {
+    "label": "Nettobreite (Berlin)",
+    "attribution": "© OpenStreetMap-Mitwirkende (ODbL) · CQI-Methodik (osm-verkehrswende.org/cqi)",
+    "file": "nettobreite/berlin.pmtiles",
+    "present": true,
+    "vintage": "2026-06-06",
+    "built": "2026-06-07"
+  },
+  "mapillary": {
+    "label": "Mapillary-Straßenfotos",
+    "attribution": "Mapillary (CC BY-SA 4.0)",
+    "live": true
+  }
+}
