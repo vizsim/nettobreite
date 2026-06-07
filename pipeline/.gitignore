@@ -15,8 +15,9 @@ data/
 # Ausnahme: das generierte Manifest gehört ins Deploy (klein, kein Datenblob)
 !data/manifest.json
 
-# Golden-Referenz gehört ins Git (klein, JSON)
+# Golden-Referenz gehört ins Git (klein): JSON-Kennzahlen + eingefrorene Stichprobe
 !tests/golden/*.json
+!tests/golden/*.parquet
 
 # --- Python / uv ---
 __pycache__/

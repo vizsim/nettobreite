@@ -1,0 +1,54 @@
+# CQI-/Nettobreite-Parameter (gegen Hardcoding). Werte exakt aus
+# preprocessing/1_prepare_width_calc_berlin.ipynb übernommen.
+# Quelle der Annahmen: OSM Cycling Quality Index
+# (https://github.com/SupaplexOSM/OSM-Cycling-Quality-Index).
+defaults:
+  # --- Parken: angenommene Breite je Orientierung (m) ---
+  parking_width_by_orientation:
+    parallel: 2.2
+    diagonal: 4.5
+    perpendicular: 5.0
+  default_parallel_parking_width: 2.2   # Fallback wenn orientation UND width fehlen
+
+  # --- Anteil der Parkbreite, der auf der Fahrbahn liegt ---
+  # (aus parking:<side>:position, sonst aus dem parking:<side>-Basistag abgeleitet)
+  parking_carriageway_fraction:
+    lane: 1.0           # auf der Fahrbahn
+    shoulder: 1.0       # wie Fahrbahn behandelt
+    half_on_kerb: 0.5   # halb auf der Fahrbahn
+    on_kerb: 0.0        # ganz auf dem Bordstein
+    street_side: 0.0    # Parkbucht neben der Fahrbahn
+    separate: 0.0
+    "no": 0.0
+  default_parking_position: lane        # frac 1.0 wenn position unbekannt
+
+  # --- parking:restriction (NEU, war README-Limitation) ---
+  # User-Entscheidung: JEDER gesetzte restriction-Wert (no_parking, no_stopping,
+  # loading_only, residents, charging_only, …) ⇒ an dieser Seite steht faktisch
+  # kein Auto auf der Fahrbahn ⇒ Parkabzug = 0 für die Seite.
+  parking_restriction_suppresses_any: true
+  # Ausnahme: diese Werte bedeuten KEINE Einschränkung (Parken erlaubt) ⇒ NICHT
+  # unterdrücken (case-insensitiv). Schützt vor parking:restriction=none/no.
+  parking_restriction_ignore_values: ["none", "no"]
+
+  # --- Radinfrastruktur ---
+  default_cycle_lane_width: 1.4         # m, wenn cycleway:width fehlt
+  cycleway_onlane_types: [lane, share_busway, advisory]  # nur diese ziehen Fahrbahnbreite ab
+
+  # --- Clipping ---
+  clamp_nonnegative: true               # width_effective nie < 0
+
+# Derzeit UNGENUTZT: width_base nimmt KEINEN Lanes-Fallback (kein Schätzen aus
+# lanes × Spurbreite). Die folgenden Notebook-Defaults bleiben dokumentiert, falls
+# ein Lanes-Fallback später gewünscht wird — sie beeinflussen die Berechnung NICHT:
+#   default_traffic_lane: 3.2
+#   default_bus_lane:      4.5
+#   lane_width_by_highway:
+#     motorway/_link, trunk/_link: 3.75
+#     primary/_link, secondary/_link: 3.50
+#     tertiary/_link, unclassified, residential: 3.25
+#     living_street, service: 3.00
+
+# Optional je Region überschreibbar (regional anpassbar):
+# overrides:
+#   berlin: { default_parallel_parking_width: 2.0 }

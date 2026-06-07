@@ -79,7 +79,10 @@ def width_build(
     dry_run: bool = typer.Option(False, "--dry-run", help="Kommandos nur zeigen"),
 ) -> None:
     """CQI-/Nettobreite-Berechnung -> <region>_nettobreite.fgb (EPSG:4326)."""
-    _todo("Phase 2", f"width build --region {_region(region)} (dry_run={dry_run})")
+    from nettobreite import width
+
+    out = width.build(_region(region), dry_run=dry_run)
+    typer.secho(f"nettobreite: {out}", fg=typer.colors.GREEN)
 
 
 # --- tiles (Phase 3) ---
