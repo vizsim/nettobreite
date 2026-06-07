@@ -92,7 +92,10 @@ def tiles(
     dry_run: bool = typer.Option(False, "--dry-run", help="tippecanoe-Kommandos nur zeigen"),
 ) -> None:
     """tippecanoe -> data/nettobreite/<region>.pmtiles (Layer 'nettobreite-lines')."""
-    _todo("Phase 3", f"tiles --region {_region(region)} (dry_run={dry_run})")
+    from nettobreite import tiles as tiles_mod
+
+    out = tiles_mod.build(_region(region), dry_run=dry_run)
+    typer.secho(f"pmtiles: {out}", fg=typer.colors.GREEN)
 
 
 # --- top-level (Phase 4) ---

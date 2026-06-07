@@ -1,0 +1,15 @@
+# Tippecanoe-Profile. tiles.py übersetzt diese in Flags (keine kopierten
+# Argumentlisten). `layer` = interner Layer-Name = Frontend-Vertrag → nicht ändern,
+# ohne addSources.js/addLayers.js mitzuziehen.
+#
+# Profil "nettobreite" reproduziert das alte Notebook exakt:
+#   tippecanoe --layer=nettobreite-lines --minimum-zoom=9 --maximum-zoom=11
+#              --force --no-feature-limit
+profiles:
+  nettobreite:
+    layer: nettobreite-lines    # source-layer in js/mapdata/addLayers.js — NICHT ändern
+    minzoom: 9
+    maxzoom: 11
+    no_feature_limit: true
+    # optional schärfer (Plan): drop_densest_as_needed / no_tile_size_limit — bewusst
+    # weggelassen, um den bestehenden Tile-Stand 1:1 zu treffen.
