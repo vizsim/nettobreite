@@ -1,9 +1,10 @@
 # --- Secrets ---
 .env
 
-# --- Daten (rohe + abgeleitete Artefakte; liegen lokal + auf B2, nicht im Git) ---
-data/
-*.pmtiles
+# --- Daten (rohe + abgeleitete Artefakte; liegen lokal + später B2, nicht im Git) ---
+# data/* (NICHT data/): ignoriert die Inhalte, lässt git aber ins Verzeichnis hinab,
+# damit die Negationen unten greifen (data/ würde das Verzeichnis komplett sperren).
+data/*
 *.parquet
 *.fgb
 *.gpkg
@@ -12,8 +13,13 @@ data/
 *.geojson
 *.geojson.gz
 
-# Ausnahme: das generierte Manifest gehört ins Deploy (klein, kein Datenblob)
+# Ausnahmen: das Manifest + die finalen PMTiles werden vorerst über GitHub gehostet
+# (B2 erst bei ganz-Deutschland) -> ins Git. Reihenfolge: erst Verzeichnis wieder
+# reinnehmen, dann dessen Inhalt sperren, dann gezielt die .pmtiles freigeben.
 !data/manifest.json
+!data/nettobreite/
+data/nettobreite/*
+!data/nettobreite/*.pmtiles
 
 # Golden-Referenz gehört ins Git (klein): JSON-Kennzahlen + eingefrorene Stichprobe
 !tests/golden/*.json

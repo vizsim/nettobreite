@@ -1,12 +1,12 @@
 export function addSources(map, { MAPTILER_API_KEY, MAPILLARY_TOKEN }) {
   // SOURCES
 
- // const pmtilesBaseURL = "https://f003.backblazeb2.com/file/nettobreite/";
-
-   // github
-  const pmtilesBaseURL = "https://raw.githubusercontent.com/vizsim/nettobreite/main/data/";
-  // local
-  //const pmtilesBaseURL = "./data/";
+  // PMTiles-Hosting: vorerst GitHub (von der Pipeline nach pipeline/data/ gebaut
+  // und in git getrackt). B2 kommt erst bei ganz-Deutschland (TODO).
+  // prod: githubusercontent raw; lokale Entwicklung: "./data/" (Symlink -> pipeline/data).
+  // const pmtilesBaseURL = "https://f003.backblazeb2.com/file/nettobreite/";  // TODO B2
+  const pmtilesBaseURL = "https://raw.githubusercontent.com/vizsim/nettobreite/main/pipeline/data/";
+  // const pmtilesBaseURL = "./data/";  // lokale Entwicklung
 
   const addPMTilesSource = (id, filename) => {
     if (!map.getSource(id)) {
@@ -17,9 +17,8 @@ export function addSources(map, { MAPTILER_API_KEY, MAPILLARY_TOKEN }) {
     }
   };
 
-  // Nettobreite layer source
- // addPMTilesSource("nettobreite", "demo_nettobreite.pmtiles");
-  addPMTilesSource("nettobreite", "berlin_nettobreite.pmtiles");
+  // Nettobreite layer source (Layer-Name im PMTiles: "nettobreite-lines")
+  addPMTilesSource("nettobreite", "nettobreite/berlin.pmtiles");
 
 
     // Mapillary

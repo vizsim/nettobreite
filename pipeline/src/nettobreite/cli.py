@@ -101,8 +101,11 @@ def tiles(
 # --- top-level (Phase 4) ---
 @app.command()
 def manifest() -> None:
-    """Generiert data/manifest.json (Local-first-Index + Datenstand)."""
-    _todo("Phase 4", "manifest -> data/manifest.json")
+    """Generiert data/manifest.json (Layer-Index + Datenstand)."""
+    from nettobreite import manifest as manifest_mod
+
+    out = manifest_mod.generate()
+    typer.secho(f"geschrieben: {out}", fg=typer.colors.GREEN)
 
 
 @app.command()
@@ -110,14 +113,28 @@ def deploy(
     dry_run: bool = typer.Option(False, "--dry-run", help="b2-Kommandos nur zeigen"),
     bucket: str = typer.Option(None, "--bucket", help="Bucket überschreiben (sonst .env)"),
 ) -> None:
-    """Lädt geänderte PMTiles + manifest.json via b2 sync ins Bucket (Secrets aus .env)."""
-    _todo("Phase 4", f"deploy (dry_run={dry_run}, bucket={bucket})")
+    """B2-Deploy (TODO): PMTiles + manifest.json via b2 sync. Vorerst werden die
+    PMTiles über GitHub gehostet (in git getrackt); B2 kommt erst mit ganz-Deutschland."""
+    _todo("TODO B2 (ganz-Deutschland)", f"deploy via b2 sync (dry_run={dry_run}, bucket={bucket})")
 
 
 @app.command("build-all")
-def build_all(region: str = REGION_OPT) -> None:
-    """Convenience: fetch -> build -> width -> tiles -> manifest für eine Region."""
-    _todo("Phase 4", f"build-all --region {_region(region)}")
+def build_all(
+    region: str = REGION_OPT,
+    force: bool = typer.Option(False, "--force", help="PBF neu laden"),
+) -> None:
+    """Convenience: fetch -> osm build -> width -> tiles -> manifest für eine Region."""
+    from nettobreite import manifest as manifest_mod
+    from nettobreite import osm, width
+    from nettobreite import tiles as tiles_mod
+
+    r = _region(region)
+    osm.fetch(r, force=force)
+    osm.build(r)
+    width.build(r)
+    out = tiles_mod.build(r)
+    manifest_mod.generate()
+    typer.secho(f"fertig: {out} (+ manifest.json)", fg=typer.colors.GREEN)
 
 
 if __name__ == "__main__":

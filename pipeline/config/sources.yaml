@@ -1,0 +1,21 @@
+# Quellen-Metadata (von Hand gepflegt). Speist das generierte data/manifest.json.
+# Pro Eintrag: Label + Attribution + woher das Datum kommt:
+#   date: auto         -> Pipeline ermittelt den Datenstand beim Build (osmium fileinfo)
+#   date: {fixed: ...} -> statischer Festwert
+#   live: true         -> externer Live-Layer (kein Build-Artefakt, kein Datum)
+#
+# `file` = Pfad relativ zu data/ (= Subfolder; bei späterem B2-Deploy 1:1 gespiegelt).
+# `region` = Schlüssel aus regions.yaml; daraus löst manifest.py `date: auto` auf.
+
+datasets:
+  nettobreite_berlin:
+    file: "nettobreite/berlin.pmtiles"
+    region: berlin
+    label: "Nettobreite (Berlin)"
+    attribution: "© OpenStreetMap-Mitwirkende (ODbL) · CQI-Methodik (osm-verkehrswende.org/cqi)"
+    date: auto            # = osmium fileinfo der berlin-PBF
+
+  mapillary:
+    live: true            # externe Coverage-Tiles, kein Build-Artefakt
+    label: "Mapillary-Straßenfotos"
+    attribution: "Mapillary (CC BY-SA 4.0)"
