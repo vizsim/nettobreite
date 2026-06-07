@@ -1,12 +1,13 @@
 export function addSources(map, { MAPTILER_API_KEY, MAPILLARY_TOKEN }) {
   // SOURCES
 
-  // PMTiles-Hosting: vorerst GitHub (von der Pipeline nach pipeline/data/ gebaut
-  // und in git getrackt). B2 kommt erst bei ganz-Deutschland (TODO).
-  // prod: githubusercontent raw; lokale Entwicklung: "./data/" (Symlink -> pipeline/data).
+  // PMTiles-Hosting: lokal aus "./data/" (Symlink -> pipeline/data, von der Pipeline
+  // gebaut), sonst von GitHub (in git getrackt). B2 erst bei ganz-Deutschland (TODO).
   // const pmtilesBaseURL = "https://f003.backblazeb2.com/file/nettobreite/";  // TODO B2
-  const pmtilesBaseURL = "https://raw.githubusercontent.com/vizsim/nettobreite/main/pipeline/data/";
-  // const pmtilesBaseURL = "./data/";  // lokale Entwicklung
+  const isLocalhost = ["localhost", "127.0.0.1"].includes(location.hostname);
+  const pmtilesBaseURL = isLocalhost
+    ? "./data/"
+    : "https://raw.githubusercontent.com/vizsim/nettobreite/main/pipeline/data/";
 
   const addPMTilesSource = (id, filename) => {
     if (!map.getSource(id)) {
