@@ -39,7 +39,9 @@ Die Region ist die einzige Skalierungs­achse (`config/regions.yaml`); weitere
 Bundesländer/Deutschland = ein weiterer YAML-Block.
 
 Die finalen PMTiles werden derzeit **über GitHub** ausgeliefert; ein Umzug auf
-**Backblaze B2** ist für die Deutschland-weite Variante vorgesehen (TODO).
+**Backblaze B2** ist für die Deutschland-weite Variante vorgesehen — der Umbau ist
+in [`docs/B2_DEPLOY.md`](docs/B2_DEPLOY.md) beschrieben. Der ursprüngliche (umgesetzte)
+Refactoring-Plan liegt unter [`docs/REFACTORING_PLAN.md`](docs/REFACTORING_PLAN.md).
 
 ---
 

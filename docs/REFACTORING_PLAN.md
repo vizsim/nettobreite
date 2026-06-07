@@ -1,5 +1,18 @@
 # Refactoring-Plan: nettobreite — Notebooks → skalierbare Python-Pipeline (+ Frontend-Feinschliff)
 
+> **🗄️ ARCHIVIERT — umgesetzt (Phasen 0–6).** Dieser Plan wurde abgearbeitet; der
+> aktuelle Stand lebt im Code (`pipeline/`, `js/`) und in der Git-History. Bewusst
+> **offen geblieben**: der B2-Deploy (auf die Deutschland-weite Variante vertagt) —
+> wie der nachgerüstet wird, steht in [B2_DEPLOY.md](B2_DEPLOY.md). `geo.py` und der
+> Region-Umschalter (§7.3) waren als optional/„jetzt nicht" markiert; die
+> Mapillary-Token-Rotation ist eine manuelle Aufgabe (siehe `js/config/config.public.js`).
+>
+> Hinweise zu Abweichungen, die sich beim Umsetzen ergaben: Layer-Name ist
+> `nettobreite-lines` (nicht `nettobreite`), Tile-Zoom 9–11 (nicht 10–14), `to-number`
+> im Frontend nicht nötig (FGB liefert typisierte Zahlen), Highway-Set = 8 Klassen
+> inkl. `*_link` ohne `road`/`living_street`, und die PMTiles werden vorerst über
+> GitHub statt B2 ausgeliefert.
+
 > **Für den ausführenden Agenten (Claude in der IDE):** Dieses Dokument ist der
 > Arbeitsplan. Arbeite es **phasenweise** ab (Phase 0 → 6), jede Phase = ein kleiner,
 > fokussierter Commit auf einem Branch `refactor/python-pipeline`. Nach jeder Phase die
