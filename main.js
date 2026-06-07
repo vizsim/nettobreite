@@ -30,15 +30,12 @@ import { setupMapillary } from './js/utils/useMapillary.js';
 // 📦 Permalink
 import { setupPermalink } from './js/utils/permalink.js';
 
-let MAPTILER_API_KEY = '';
 let MAPILLARY_TOKEN = '';
 
 let originalMinZoom = 9;
 let originalMaxZoom = 20;
 
 let currentZoomLock = null;
-
-const isInitializingRef = { value: true };
 
 const isLocalhost = location.hostname === "localhost";
 
@@ -48,7 +45,7 @@ window.popupsEnabled = () => true; // Always enabled for now
 (async () => {
   try {
     const config = await import(isLocalhost ? './js/config/config.js' : './js/config/config.public.js');
-    ({ MAPTILER_API_KEY, MAPILLARY_TOKEN } = config);
+    ({ MAPILLARY_TOKEN } = config);
     console.log(`🔑 ${isLocalhost ? "Lokale config.js" : "config.public.js"} geladen`);
 
     initMap();
@@ -60,7 +57,7 @@ window.popupsEnabled = () => true; // Always enabled for now
 
 async function initMap() {
   // Load pmtiles protocol
-  const pmtilesBaseURL = "https://f003.backblazeb2.com/file/nettobreite/";
+  const pmtilesBaseURL = "https://tiles.vizsim.de/file/nettobreite/";
   const protocol = new pmtiles.Protocol(name => `${pmtilesBaseURL}${name}`);
   maplibregl.addProtocol("pmtiles", protocol.tile);
 
@@ -236,7 +233,7 @@ function setupEventHandlers(map) {
 function initializeMapModules(map) {
   setupPhotonGeocoder(map);
   addNavigationControl(map);
-  addSources(map, { MAPILLARY_TOKEN, MAPTILER_API_KEY });
+  addSources(map, { MAPILLARY_TOKEN });
   addLayers(map);
   // Basemap-Umschalter + Mapterhorn-Relief/3D NACH addSources/addLayers (Symbol-
   // Reihenfolge steht dann); ersetzt die alten MapTiler-Terrain/Hillshade-Handler.
