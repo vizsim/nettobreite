@@ -1,0 +1,13 @@
+# Highway-Extraktion: osmium tags-filter (streaming) -> Kategorie-PBF -> pyogrio
+# liest die "lines" DIREKT (OSM_CONFIG_FILE = osmconf) -> FlatGeobuf.
+# Kein ogr2ogr/GPKG/GeoJSON. Output je Region: data/raw/osm/<region>_highways.fgb
+# (Input für width.py, Phase 2).
+#
+# Highway-Set (User-Entscheidung): innerörtliche Mischverkehrsstraßen + *_link,
+# OHNE road/living_street und OHNE motorway/trunk (für Überholbreite irrelevant).
+# Einzige Filterstelle — width.py filtert NICHT noch einmal nach highway.
+highways:
+  osmium_filter:
+    - "w/highway=primary,secondary,tertiary,unclassified,residential,primary_link,secondary_link,tertiary_link"
+  osmconf: "osmconf_highways-widths.ini"   # exponiert width/parking/cycleway/lanes/… (config/osmconf/)
+  osm_layers: ["lines"]

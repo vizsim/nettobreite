@@ -54,7 +54,10 @@ def osm_fetch(
     force: bool = typer.Option(False, "--force", help="Erneut laden, auch wenn vorhanden"),
 ) -> None:
     """Lädt die Region-PBF von Geofabrik nach data/raw/osm/."""
-    _todo("Phase 1", f"osm fetch --region {_region(region)} (force={force})")
+    from nettobreite import osm
+
+    dest = osm.fetch(_region(region), force=force)
+    typer.secho(f"PBF: {dest}", fg=typer.colors.GREEN)
 
 
 @osm_app.command("build")
@@ -63,7 +66,10 @@ def osm_build(
     dry_run: bool = typer.Option(False, "--dry-run", help="Kommandos nur zeigen"),
 ) -> None:
     """osmium tags-filter -> pyogrio (direkt PBF->FGB) -> <region>_highways.fgb."""
-    _todo("Phase 1", f"osm build --region {_region(region)} (dry_run={dry_run})")
+    from nettobreite import osm
+
+    out = osm.build(_region(region), dry_run=dry_run)
+    typer.secho(f"highways: {out}", fg=typer.colors.GREEN)
 
 
 # --- width (Phase 2) ---
